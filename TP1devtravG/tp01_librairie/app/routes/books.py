@@ -50,12 +50,12 @@ def create_new_book(name: str, Author: str,edditor: str):
     return JSONResponse(new_book.model_dump())
 
 @router.post('/modify')
-def modify_book(id : str,name: str, Author: str,edditor: str):
+def modify_book(id :str,name: str, Author: str,edditor: str):
     new_book_data = {
         "id": id,
         "name": name,
         "Author": Author,
-        "edditor":edditor,
+        "Editor":edditor,
     }
     try:
         new_book = Book.model_validate(new_book_data)
@@ -64,8 +64,8 @@ def modify_book(id : str,name: str, Author: str,edditor: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or author or edditor or id for the book.",
         )
-    service.modify_book_by_id(new_book)
-    return JSONResponse(new_book.model_dump())
+    service.modify_book_by_id(id,new_book)
+    return JSONResponse(new_book.model_dump(), status_code=200)
 router.post('/delete')
 def deletebook(id:str):
     service.delete_book_by_id(id)
