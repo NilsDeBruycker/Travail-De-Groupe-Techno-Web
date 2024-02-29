@@ -37,3 +37,11 @@ def modify_book_by_id(book_id: str,modified_book) -> Book | None:
         if  database["books"][i]["id"]== book_id:
             database["books"][i] =modified_book 
         i+=1
+def is_book_exist(book_id:str):
+    i=0
+    for book in database["books"]:
+        if  database["books"][i]["id"]== book_id:
+    
+            return True
+        else: i+=1
+    return False

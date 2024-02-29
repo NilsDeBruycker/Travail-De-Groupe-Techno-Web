@@ -12,14 +12,14 @@ router = APIRouter(prefix="/books", tags=["Books"])
 
 
 @router.get('/')
-def get_all_Books():
-    Books = service.get_all_books()
+def get_all_books():
+    books = service.get_all_books()
+    total_books = len(books)
     return JSONResponse(
-        content= [book.model_dump() for book in Books],
         status_code=200,
-    ),JSONResponse(content= [len(Books)],
-        status_code=200,)
-    
+        content={"total_books": total_books, "books": [book.dict() for book in books]}
+    )
+
 
 
 
@@ -70,7 +70,17 @@ def modify_book(id :str,name: str, Author: str,edditor: str):
     service.modify_book_by_id(id,new_book)
     return JSONResponse(new_book.model_dump(), status_code=200)
 
-
 @router.delete('/delete')
-def deletebook(id:str):
-    service.delete_book_by_id(id)
+def delete_book(delete_id:str):
+    if not service.is_book_exist(delete_id):
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Book not found."}
+        )
+    
+    service.delete_book_by_id(delete_id)
+    
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Book deleted successfully."}
+    )
