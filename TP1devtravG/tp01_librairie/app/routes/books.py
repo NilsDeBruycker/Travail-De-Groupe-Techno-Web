@@ -8,16 +8,19 @@ from app.schemas import Book
 import app.services.Books as service
 
 
-router = APIRouter(prefix="/books", tags=["Tasks"])
+router = APIRouter(prefix="/books", tags=["Books"])
 
 
 @router.get('/')
 def get_all_Books():
     Books = service.get_all_books()
     return JSONResponse(
-        content=[book.model_dump() for book in Books],
+        content= [book.model_dump() for book in Books],
         status_code=200,
-    )
+    ),JSONResponse(content= [len(Books)],
+        status_code=200,)
+    
+
 
 
 @router.get('/{task_id}')
@@ -37,7 +40,7 @@ def create_new_book(name: str, Author: str,edditor: str):
         "id": str(uuid4()),
         "name": name,
         "Author": Author,
-        "edditor":edditor,
+        "Editor":edditor,
     }
     try:
         new_book = Book.model_validate(new_book_data)
@@ -50,12 +53,12 @@ def create_new_book(name: str, Author: str,edditor: str):
     return JSONResponse(new_book.model_dump())
 
 @router.post('/modify')
-def modify_book(id : str,name: str, Author: str,edditor: str):
+def modify_book(id :str,name: str, Author: str,edditor: str):
     new_book_data = {
         "id": id,
         "name": name,
         "Author": Author,
-        "edditor":edditor,
+        "Editor":edditor,
     }
     try:
         new_book = Book.model_validate(new_book_data)
@@ -64,8 +67,10 @@ def modify_book(id : str,name: str, Author: str,edditor: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or author or edditor or id for the book.",
         )
-    service.modify_book_by_id(new_book)
-    return JSONResponse(new_book.model_dump())
-router.post('/delete')
+    service.modify_book_by_id(id,new_book)
+    return JSONResponse(new_book.model_dump(), status_code=200)
+
+
+@router.delete('/delete')
 def deletebook(id:str):
     service.delete_book_by_id(id)

@@ -10,6 +10,7 @@ def save_book(new_book: Book) -> Book:
 def get_all_books() -> list[Book]:
     books_data = database["books"]
     books = [Book.model_validate(data) for data in books_data]
+    
     return books
 
 
@@ -24,11 +25,15 @@ def get_book_by_id(book_id: str) -> Book | None:
     return selected_book
     
 def delete_book_by_id(book_id:str):
+    i=0
     for book in database["books"]:
-        if book["id"] == book_id:
-            del database[book_id]
+        if  database["books"][i]["id"]== book_id:
+            del database["books"][i]
+        i+=1
 
-def modify_book_by_id(book_id:str,modified_book:str):
+def modify_book_by_id(book_id: str,modified_book) -> Book | None:
+    i=0
     for book in database["books"]:
-        if book["id"] == book_id:
-            database[book_id]=modified_book
+        if  database["books"][i]["id"]== book_id:
+            database["books"][i] =modified_book 
+        i+=1
