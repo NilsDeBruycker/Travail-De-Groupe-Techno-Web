@@ -14,11 +14,11 @@ router = APIRouter(prefix="/books", tags=["Books"])
 @router.get('/')
 def get_all_Books():
     Books = service.get_all_books()
-    return JSONResponse(
-        content= [book.model_dump() for book in Books],
-        status_code=200,
-    ),JSONResponse(content= [len(Books)],
-        status_code=200,)
+
+    return JSONResponse({
+        'books': [book.model_dump() for book in Books],
+        'nb_books': len(Books)
+    })
     
 
 
@@ -54,7 +54,7 @@ def create_new_book(name: str, Author: str,edditor: str):
     service.save_book(new_book)
     return JSONResponse(new_book.model_dump())
 
-@router.put('/modify')
+@router.post('/modify')
 def modify_book(id :str,name: str, Author: str,edditor: str):
     new_book_data = {
         "id": id,
@@ -75,6 +75,6 @@ def modify_book(id :str,name: str, Author: str,edditor: str):
     return JSONResponse(new_book.model_dump(), status_code=200)
 
 
-@router.delete('/delete')
+@router.delete('/delete{task_id}')
 def deletebook(id:str):
     service.delete_book_by_id(id)

@@ -13,7 +13,7 @@ database = {
         {
             "id": str(uuid4()),
             "name": "tintin",
-            "Author": "herger",
+            "Author": "hergé",
             "Editor": "dupuis",
         },
         {
