@@ -49,10 +49,12 @@ def create_new_book(name: str, Author: str,edditor: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or description for the task.",
         )
+    if name.isspace() or Author.isspace()or edditor.isspace():
+        return JSONResponse("error one of the field is empty or only contain white space")
     service.save_book(new_book)
     return JSONResponse(new_book.model_dump())
 
-@router.post('/modify')
+@router.put('/modify')
 def modify_book(id :str,name: str, Author: str,edditor: str):
     new_book_data = {
         "id": id,
@@ -67,6 +69,8 @@ def modify_book(id :str,name: str, Author: str,edditor: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or author or edditor or id for the book.",
         )
+    if name.isspace() or Author.isspace()or edditor.isspace():
+        return JSONResponse("error one of the field is empty or only contain white space")
     service.modify_book_by_id(id,new_book)
     return JSONResponse(new_book.model_dump(), status_code=200)
 
