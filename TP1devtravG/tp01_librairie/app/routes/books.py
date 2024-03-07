@@ -76,5 +76,16 @@ def modify_book(id :str,name: str, Author: str,edditor: str):
 
 
 @router.delete('/delete{task_id}')
-def deletebook(id:str):
-    service.delete_book_by_id(id)
+def delete_book(delete_id:str):
+    if not service.is_book_exist(delete_id):
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Book not found."}
+        )
+
+    service.delete_book_by_id(delete_id)
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Book deleted successfully."}
+    )

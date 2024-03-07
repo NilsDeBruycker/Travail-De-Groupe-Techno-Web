@@ -30,6 +30,14 @@ def delete_book_by_id(book_id:str):
         if  database["books"][i]["id"]== book_id:
             del database["books"][i]
         i+=1
+def is_book_exist(book_id:str):
+    i=0
+    for book in database["books"]:
+        if  database["books"][i]["id"]== book_id:
+
+            return True
+        i+=1
+    return False
 
 def modify_book_by_id(book_id: str,modified_book) -> Book | None:
     i=0
