@@ -23,16 +23,6 @@ def get_all_Books():
 
 
 
-@router.get('/{task_id}')
-def get_book(book_id: str):
-    book = service.get_book_by_id(book_id)
-    if book is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No book found with this ID.",
-        )
-    return JSONResponse(book.model_dump())
-
 
 @router.post('/')
 def create_new_book(name: str, Author: str,edditor: str):

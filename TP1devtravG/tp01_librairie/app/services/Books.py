@@ -14,15 +14,6 @@ def get_all_books() -> list[Book]:
     return books
 
 
-def get_book_by_id(book_id: str) -> Book | None:
-    selected_book = [
-        book for book in database["books"]
-        if book["id"] == book_id
-    ]
-    if len(selected_book) < 1:
-        return None
-    selected_book = Book.model_validate(selected_book[0])
-    return selected_book
     
 def delete_book_by_id(book_id:str):
     i=0
