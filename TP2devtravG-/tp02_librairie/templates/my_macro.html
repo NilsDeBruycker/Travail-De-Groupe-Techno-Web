@@ -1,0 +1,15 @@
+{% macro show_task(name, description, creation_date) %}
+    <tr>
+        <td>{{ name }}</td>
+        
+        <td>
+        {% if description|length < 1 %}
+            /
+        {% else %}
+            {{description}}
+        {% endif %}
+        </td>
+
+        <td>{{ creation_date.strftime('%Y-%m-%d')  }}</td>
+    </tr>
+{% endmacro %}
