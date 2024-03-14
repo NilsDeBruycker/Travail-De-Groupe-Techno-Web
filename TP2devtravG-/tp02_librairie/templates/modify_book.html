@@ -4,40 +4,34 @@
 
 <h1>Modifier un Livre </h1> 
 
-<form action="/tasks/new" method="post">
+<form action="/books/new" method="post">
+
+    <div class="form-group">
+        <label for="book_name">Nom du livre</label>
+        <input type="text" class="form-control" id="book_name"
+               name="name" placeholder="" />
+    </div>
+
+    <div class="form-group">
+        <label for="book_description">Description du Livre</label>
+        <textarea class="form-control" id="book_description"
+               name="description"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="author">Nom de l'auteur</label>
+        <input type="text" class="form-control" id="author"
+               name="author" />
+    </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <button type="submit" class="btn btn-success my-4">Modifier un Livre </button>
 
 </form>
 
 
 <div>
-    <a class="btn btn-outline-dark mx-2" href="/tasks/all">Retour</a>
+    <a class="btn btn-outline-dark mx-2" href="/books/all">Retour</a>
 </div>
 
 {% endblock %}
