@@ -1,5 +1,5 @@
 {% extends "empty_page.html" %}
-{% from "my_macro.html" import show_task %}
+{% from "my_macro.html" import show_books %}
 
 {% block content %}
 
@@ -29,14 +29,6 @@
             {{ show_book(book.id, task.name, task.description, task.creation_date) }}
         {% endfor %}
     </table> 
-    <table class="table">
-        <p>delete</p>
-        <tr>
-            <th>id</th>
-            delete
-
-        </tr>
-    </table>
 </div>
 
 <div>

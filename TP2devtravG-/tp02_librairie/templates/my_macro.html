@@ -1,15 +1,17 @@
-{% macro show_task(name, description, creation_date) %}
+{% macro show_books(id,name, Author, edditor) %}
     <tr>
+        <td>{{id}}</td>
+        
         <td>{{ name }}</td>
         
         <td>
-        {% if description|length < 1 %}
+        {% if Author|length < 1 %}
             /
         {% else %}
-            {{description}}
+            {{Author}}
         {% endif %}
         </td>
 
-        <td>{{ creation_date.strftime('%Y-%m-%d')  }}</td>
+        <td>{{ edditor.strftime('%Y-%m-%d')  }}</td>
     </tr>
 {% endmacro %}

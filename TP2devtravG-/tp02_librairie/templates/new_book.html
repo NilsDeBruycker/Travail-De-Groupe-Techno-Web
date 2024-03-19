@@ -32,5 +32,15 @@
 <div>
     <a class="btn btn-outline-dark mx-2" href="/tasks/all">Retour</a>
 </div>
+<form action="/tasks/delete" method="post">
 
+    <div class="form-group">
+        <label for="id">id de la tâche</label>
+        <input type="text" class="form-control" id="task_name"
+               name="name" placeholder="zrsf869fss2qek8hzr88kjh9qS5444" />
+    </div>
+
+    <button type="submit" class="btn btn-success my-4">suprimer le livre</button>
+
+</form>
 {% endblock %}

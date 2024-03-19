@@ -6,19 +6,21 @@ from pydantic import ValidationError
 
 from app.schemas import Book
 import app.services.Books as service
+from fastapi.templating import Jinja2Templates
+from fastapi import APIRouter, HTTPException, status, Request, Form
 
 
 router = APIRouter(prefix="/books", tags=["Books"])
-
+templates = Jinja2Templates(directory="templates")
 
 @router.get('/')
-def get_all_Books():
+def get_all_Books(request:Request):
     Books = service.get_all_books()
-    return JSONResponse(
-        content= [book.model_dump() for book in Books],
-        status_code=200,
-    ),JSONResponse(content= [len(Books)],
-        status_code=200,)
+    return templates.TemplateResponse(
+        "all_books.html",
+        context={'request': request, 'tasks': Books}
+    )
+
     
 
 
