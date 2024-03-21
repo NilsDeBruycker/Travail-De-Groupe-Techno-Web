@@ -1,6 +1,24 @@
-
+/*Style for the main books page*/
 body {
-    /* 1rem = 16px */
+    /* Styles globaux pour le corps de la page */
     padding: 6rem;
     font-family: Arial, Helvetica, sans-serif;
 }
+/* Styles pour le bouton "Créer un nouveau livre" */
+.btn-create {
+    border: 2px solid #9bc1f0; /* Bleu pastel */
+    background-color: #dee6ee; /* Bleu clair */
+}
+
+/* Styles pour le bouton "Modifier un livre" */
+.btn-modify {
+    border: 2px solid #f571ae; /* Rose pastel clair */
+    background-color: #e6bbbf; /* Rose clair */
+}
+
+/* Styles pour le bouton "Supprimer" */
+.btn-delete {
+    border: 2px solid #f15464; /* Rouge pastel */
+    background-color: #f7c1c6; /* Rouge clair */
+}
+

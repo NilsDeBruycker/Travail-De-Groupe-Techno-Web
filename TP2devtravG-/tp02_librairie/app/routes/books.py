@@ -8,10 +8,15 @@ from app.schemas import Book
 import app.services.Books as service
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, HTTPException, status, Request, Form
+from fastapi.staticfiles import StaticFiles
 
 
 router = APIRouter(prefix="/books", tags=["Books"])
 templates = Jinja2Templates(directory="templates")
+static= StaticFiles(directory="static")
+
+
+
 
 @router.get('/')
 def get_all_Books(request:Request):
@@ -85,9 +90,7 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
     service.modify_book_by_id(id,new_book)
     return RedirectResponse(url="/books/", status_code=302)
 
-@router.get('/delete')
-def redirect_to_home():
-    return RedirectResponse(url="/books/", status_code=302)
+
 @router.post('/delete')
 def deletebook(id: Annotated[str, Form()]):
     if not service.is_book_exist(id):
