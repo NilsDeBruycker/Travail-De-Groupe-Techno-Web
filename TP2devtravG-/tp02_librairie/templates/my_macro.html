@@ -4,14 +4,8 @@
         
         <td>{{ name }}</td>
         
-        <td>
-        {% if Author|length < 1 %}
-            /
-        {% else %}
-            {{Author}}
-        {% endif %}
-        </td>
+        <td>{{Author}}</td>
 
-        <td>{{ edditor.strftime('%Y-%m-%d')  }}</td>
+        <td>{{edditor}}</td>
     </tr>
 {% endmacro %}

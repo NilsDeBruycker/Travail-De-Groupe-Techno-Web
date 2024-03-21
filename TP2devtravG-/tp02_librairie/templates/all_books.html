@@ -6,27 +6,13 @@
 <div class="container">
     <table class="table">
         <tr>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Date de création</th>
-        </tr>
-        {% for task in tasks %}
-            {{ show_task(task.name, task.description, task.creation_date) }}
-        {% endfor %}
-    </table> 
-</div>
-
-<div>
-    <a class="btn btn-outline-success mx-4" href="/tasks/new">Créer une nouvelle tâche</a>
-</div>
-
             <th>id</th>
-            <th>Nom</th>
-            <th>Author</th>
-            <th>Editor</th>
+            <th>nom</th>
+            <th>Autheur</th>
+            <th>Edditeur</th>
         </tr>
         {% for book in books %}
-            {{ show_book(book.id, task.name, task.description, task.creation_date) }}
+            {{ show_books(book.id, book.name, book.Author, book.Editor) }}
         {% endfor %}
     </table> 
 </div>
@@ -35,15 +21,22 @@
     <a class="btn btn-outline-success mx-4" href="/books/new">Créer un nouveau livre</a>
 </div>
 
-<form action="/tasks/delete" method="post">
+<p></p>
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/modify">modifier un livre</a>
+</div>
 
+<form action="/books/delete" method="post">
+    
+    <button type="submit" class="btn btn-success my-4">suprimer le livre</button>
+    
     <div class="form-group">
         <label for="id">id de la tâche</label>
-        <input type="text" class="form-control" id="task_name"
-               name="name" placeholder="zrsf869fss2qek8hzr88kjh9qS5444" />
+        <input type="text" class="form-control" id="id"
+               name="id" placeholder="zrsf869fss2qek8hzr88kjh9qS5444" />
     </div>
 
-    <button type="submit" class="btn btn-success my-4">suprimer le livre</button>
+    
 
 </form>
 
