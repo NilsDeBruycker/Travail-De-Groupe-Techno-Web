@@ -12,13 +12,15 @@ body {
 
 /* Styles pour le bouton "Modifier un livre" */
 .btn-modify {
-    border: 2px solid #f571ae; /* Rose pastel clair */
-    background-color: #e6bbbf; /* Rose clair */
+    border: 2px solid #d7c820; /* Rose pastel clair */
+    background-color: #d7c820; /* Rose clair */
+    color:rgb(12, 12, 12);
 }
 
 /* Styles pour le bouton "Supprimer" */
 .btn-delete {
     border: 2px solid #f15464; /* Rouge pastel */
     background-color: #f7c1c6; /* Rouge clair */
+    color:#0a090a
 }
 
