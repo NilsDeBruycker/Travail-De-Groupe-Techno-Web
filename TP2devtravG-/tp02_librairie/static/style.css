@@ -6,7 +6,7 @@ body {
 }
 /* Styles pour le bouton "Créer un nouveau livre" */
 .btn-create {
-    border: 2px solid #9bc1f0; /* Bleu pastel */
+    border: 1px solid #9bc1f0; /* Bleu pastel */
     background-color: #dee6ee; /* Bleu clair */
 }
 
