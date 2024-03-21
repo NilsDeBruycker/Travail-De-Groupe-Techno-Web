@@ -1,0 +1,43 @@
+{% extends "empty_page.html" %}
+
+{% block content %}
+
+<h1>Modifier un Livre </h1> 
+
+<form action="/books/modify" method="post">
+
+    <div class="form-group">
+        <label for="book_name">id</label>
+        <input type="text" class="form-control" id="id"
+               name="id" placeholder="" />
+    </div>
+
+    <div class="form-group">
+        <label for="book_name">Nom du livre</label>
+        <input type="text" class="form-control" id="name"
+               name="name" placeholder="" />
+    </div>
+
+    <div class="form-group">
+        <label for="Author">Autheur du Livre</label>
+        <input type="text" class="form-control" id="Author"
+               name="Author" placeholder="" />
+    </div>
+    
+    <div class="form-group">
+        <label for="Editor">Nom de l'editeur</label>
+        <input type="text" class="form-control" id="Editor"
+               name="Editor" placeholder="" />
+    </div>
+
+
+    <button type="submit" class="btn btn-success my-4">Modifier un Livre </button>
+
+</form>
+
+
+<div>
+    <a class="btn btn-outline-dark mx-2" href="/books/">Retour</a>
+</div>
+
+{% endblock %}

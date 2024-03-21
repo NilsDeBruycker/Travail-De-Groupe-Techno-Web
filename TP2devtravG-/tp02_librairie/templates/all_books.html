@@ -1,0 +1,43 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_books %}
+
+{% block content %}
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>id</th>
+            <th>nom</th>
+            <th>Autheur</th>
+            <th>Edditeur</th>
+        </tr>
+        {% for book in books %}
+            {{ show_books(book.id, book.name, book.Author, book.Editor) }}
+        {% endfor %}
+    </table> 
+</div>
+
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/new">Créer un nouveau livre</a>
+</div>
+
+<p></p>
+<div>
+    <a class="btn btn-outline-success mx-4" href="/books/modify">modifier un livre</a>
+</div>
+
+<form action="/books/delete" method="post">
+    
+    <button type="submit" class="btn btn-success my-4">suprimer le livre</button>
+    
+    <div class="form-group">
+        <label for="id">id du livre</label>
+        <input type="text" class="form-control" id="id"
+               name="id" placeholder="entrez l'id du livre à supprimer" />
+    </div>
+
+    
+
+</form>
+
+{% endblock %}
