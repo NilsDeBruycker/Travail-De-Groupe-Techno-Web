@@ -6,21 +6,22 @@ body {
 }
 /* Styles pour le bouton "Créer un nouveau livre" */
 .btn-create {
-    border: 1px solid #9bc1f0; /* Bleu pastel */
-    background-color: #dee6ee; /* Bleu clair */
+    border: 1px solid #000000; /* Bleu pastel */
+    background-color: #000000; /* Bleu clair */
+    color:white;
 }
 
 /* Styles pour le bouton "Modifier un livre" */
 .btn-modify {
     border: 2px solid #d7c820; /* Rose pastel clair */
     background-color: #d7c820; /* Rose clair */
-    color:rgb(12, 12, 12);
+    color:rgb(249, 249, 252);
 }
 
 /* Styles pour le bouton "Supprimer" */
 .btn-delete {
-    border: 2px solid #f15464; /* Rouge pastel */
-    background-color: #f7c1c6; /* Rouge clair */
-    color:#0a090a
+    border: 2px solid #c00013; /* Rouge pastel */
+    background-color: #c00013; /* Rouge clair */
+    color:#ffffff
 }
 
