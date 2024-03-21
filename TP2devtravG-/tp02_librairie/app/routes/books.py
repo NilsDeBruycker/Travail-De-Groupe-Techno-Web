@@ -85,7 +85,9 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
     service.modify_book_by_id(id,new_book)
     return RedirectResponse(url="/books/", status_code=302)
 
-
+@router.get('/delete')
+def redirect_to_home():
+    return RedirectResponse(url="/books/", status_code=302)
 @router.post('/delete')
 def deletebook(id: Annotated[str, Form()]):
     if not service.is_book_exist(id):
