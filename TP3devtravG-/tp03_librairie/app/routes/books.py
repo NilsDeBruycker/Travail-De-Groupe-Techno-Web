@@ -7,9 +7,11 @@ from fastapi.responses import RedirectResponse
 from app.schemas import Book
 import app.services.Books as service
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter, HTTPException, status, Request, Form
+from fastapi import APIRouter, HTTPException, status, Request, Form, Depends, Body
 from fastapi.staticfiles import StaticFiles
-
+from app.login_manager import login_manager
+from app.services.users import get_user_by_username
+from app.schemas import UserSchema
 
 router = APIRouter(prefix="/books", tags=["Books"])
 templates = Jinja2Templates(directory="templates")
@@ -32,6 +34,7 @@ def get_all_Books(request:Request):
 
 @router.get('/new')
 def get_book(request: Request):
+    user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
     return templates.TemplateResponse(
         "new_book.html",
         context={'request': request,}
