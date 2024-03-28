@@ -34,7 +34,12 @@ def get_all_Books(request:Request):
 
 @router.get('/new')
 def get_book(request: Request):
-    user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
+    try :
+        user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
+    except:
+        return templates.TemplateResponse(
+        "login.html",
+        context={'request': request,})
     return templates.TemplateResponse(
         "new_book.html",
         context={'request': request,}
@@ -43,6 +48,7 @@ def get_book(request: Request):
 
 @router.post('/new')
 def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor: Annotated[str, Form()]):
+    user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
     new_book_data = {
         "id": str(uuid4()),
         "name": name,
@@ -61,6 +67,7 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
 
 @router.get('/modify')
 def go_to_modify(request: Request):
+    user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
     return templates.TemplateResponse(
         "modify_book.html",
         context={'request': request,}
@@ -96,6 +103,7 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
 
 @router.post('/delete')
 def deletebook(id: Annotated[str, Form()]):
+    user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
