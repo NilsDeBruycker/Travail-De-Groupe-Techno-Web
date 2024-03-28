@@ -1,6 +1,6 @@
 from fastapi_login import LoginManager
 
-from my_app.services.users import get_user_by_id
+from app.services.users import get_user_by_id
 
 
 SECRET = "SECRET"

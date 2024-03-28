@@ -3,9 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, status, Depends, Body
 from fastapi.responses import JSONResponse
 
-from my_app.login_manager import login_manager
-from my_app.services.users import get_user_by_username
-from my_app.schemas import UserSchema
+from app.login_manager import login_manager
+from app.services.users import get_user_by_username
+from app.schemas import UserSchema
 
 
 router = APIRouter(prefix="/users")
