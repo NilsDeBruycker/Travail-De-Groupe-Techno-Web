@@ -1,20 +1,28 @@
 from typing import Annotated
-
-from fastapi import APIRouter, HTTPException, status, Depends, Body
-from fastapi.responses import JSONResponse
-
+from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import APIRouter, HTTPException, status, Request, Form, Depends, Body
 from app.login_manager import login_manager
-from app.services.users import get_user_by_username
+from app.services.users import get_user_by_username,sign_up_user
 from app.schemas import UserSchema
-
-
+from pydantic import ValidationError
+from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/users")
+templates = Jinja2Templates(directory="templates")
 
+
+@router.get("/login")
+def go_tosignup(request:Request):    
+    return templates.TemplateResponse(
+        "login.html",
+        context={'request': request}
+    )
 
 @router.post("/login")
 def login_route(
         username: Annotated[str, Body()],
+        email:Annotated[str, Body()],
         password: Annotated[str, Body()],
+        role: Annotated[str, Body()],
 ):
     user = get_user_by_username(username)
     if user is None or user.password != password:
@@ -34,9 +42,31 @@ def login_route(
     )
     return response
 
+@router.get("/sign_up")
+def go_tosignup(request:Request):    
+    return templates.TemplateResponse(
+        "signup.html",
+        context={'request': request}
+    )
 
+@router.post("/sign_up")
+def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],password: Annotated[str, Form()]):
+    new_user = {
+        "username": username,
+        "email": email,
+        "password": password,
+        "role":"normal"}
+    
+    try:
+        new_user = UserSchema.model_validate(new_user)
+    except ValidationError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid name or author or edditor for the book.",
+        )
+    sign_up_user(new_user)
 
-
+    return RedirectResponse(url="/books/", status_code=302)
 
 @router.post('/logout')
 def logout_route():

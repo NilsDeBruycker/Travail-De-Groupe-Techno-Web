@@ -51,5 +51,12 @@ database = {
         "Author": "Paulo Coelho",
         "Editor": "Anne Carrière"
         }
+    ],
+    "users":[
+            {"username":"jon",
+            "email":"arbucle@gmail.com",
+            "password":"1234",
+            "role":"normal"}
+
     ]
 }

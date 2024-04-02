@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class UserSchema(BaseModel):
-    id: str
     username: str
+    email: str
     password: str
+    role: str
