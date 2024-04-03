@@ -21,12 +21,13 @@ static= StaticFiles(directory="static")
 
 
 @router.get('/')
-def get_all_Books(request:Request):
+def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optional)):
     Books = service.get_all_books()
+
     return templates.TemplateResponse(
         "all_books.html",
-        context={'request': request, 'books': Books}
-    )
+        context={'request': request,'current_user': user ,'books': Books}
+        )
 
     
 
@@ -34,6 +35,7 @@ def get_all_Books(request:Request):
 
 @router.get('/new')
 def get_book(request: Request, user: UserSchema = Depends(login_manager.optional)):
+    login_manager
     if user==None:
         return templates.TemplateResponse(
         "login.html",

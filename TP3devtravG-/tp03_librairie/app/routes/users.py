@@ -19,10 +19,9 @@ def go_tosignup(request:Request):
 
 @router.post("/login")
 def login_route(
-        username: Annotated[str, Body()],
-        email:Annotated[str, Body()],
-        password: Annotated[str, Body()],
-        role: Annotated[str, Body()],
+        username: Annotated[str, Form()],
+        email:Annotated[str, Form()],
+        password: Annotated[str, Form()],
 ):
     user = get_user_by_username(username)
     if user is None or user.password != password:
@@ -31,10 +30,10 @@ def login_route(
             detail="Bad credentials."
         )
     access_token = login_manager.create_access_token(
-        data={'sub': user.id}
+        data={'sub': user.email}
     )
     
-    response = JSONResponse({"status": "success"})
+    response = RedirectResponse(url="/books/", status_code=302)
     response.set_cookie(
         key=login_manager.cookie_name,
         value=access_token,
@@ -50,23 +49,29 @@ def go_tosignup(request:Request):
     )
 
 @router.post("/sign_up")
-def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],password: Annotated[str, Form()]):
-    new_user = {
-        "username": username,
-        "email": email,
-        "password": password,
-        "role":"normal"}
-    
-    try:
-        new_user = UserSchema.model_validate(new_user)
-    except ValidationError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid name or author or edditor for the book.",
-        )
-    sign_up_user(new_user)
+def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],password: Annotated[str, Form()],password2: Annotated[str, Form()]):
+    if password==password2:
+        new_user = {
+            "username": username,
+            "email": email,
+            "password": password,
+            "role":"normal"}
+        
+        try:
+            new_user = UserSchema.model_validate(new_user)
+        except ValidationError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid name or author or edditor for the book.",
+            )
+        sign_up_user(new_user)
 
-    return RedirectResponse(url="/books/", status_code=302)
+        return RedirectResponse(url="/books/", status_code=302)
+    else:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="confirmation password is not the same password"
+        )
 
 @router.post('/logout')
 def logout_route():

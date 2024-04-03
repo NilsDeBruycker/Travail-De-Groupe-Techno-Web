@@ -1,6 +1,6 @@
 from fastapi_login import LoginManager
 
-from app.services.users import get_user_by_id
+from app.services.users import get_user_by_email
 
 
 SECRET = "SECRET"
@@ -10,4 +10,4 @@ login_manager.cookie_name = "auth_cookie"
 
 @login_manager.user_loader()
 def query_user(user_id: str):
-    return get_user_by_id(user_id)
+    return get_user_by_email(user_id)

@@ -1,6 +1,9 @@
 {% extends "empty_page.html" %}
 {% from "my_macro.html" import show_books %}
 {% block content %}
+{% if current_user is not none %}
+    <h2>Utilisateur connecté : {{ current_user.username }}</h2>
+{% endif %}
 <h1>My Books</h1>
 <div class="container">
     <table class="table">
@@ -15,8 +18,13 @@
         {% endfor %}
     </table> 
 </div>
-
-<div class="container mt-3">
+{%if current_user is none%}
+<div>
+    <a class="btn btn-outline-dark mx-2" href="/users/login">Log In</a>
+</div>
+{% endif %}
+{% if current_user is not none %}
+    <div class="container mt-3">
     <div class="row">
         <div class="col">
             <a class="btn btn-outline-success btn-create" href="/books/new">Créer un nouveau livre</a>
@@ -34,4 +42,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
