@@ -83,11 +83,11 @@ def logout_route():
     return response
 
 @router.post("/block")
-def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+def go_to_block_page(email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
     user_service.block_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 @router.post("/unblock")
-def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+def go_to_block_page(email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
     user_service.unblock_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 
@@ -111,14 +111,14 @@ def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
         context={'request': request,'current_user': user ,'users': users}
         )
 @router.post("/promote")
-def promote_user_route(request:Request,email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
+def promote_user_route(email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can promote users.")
     promote_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 
 @router.post("/demote")
-def demote_user_route(request:Request,email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
+def demote_user_route(email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can demote users.")
     demote_user(email)
