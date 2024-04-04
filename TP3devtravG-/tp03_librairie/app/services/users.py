@@ -1,5 +1,3 @@
-from fastapi import Depends, HTTPException, Request
-from app import login_manager
 from app.database import database
 from app.schemas import UserSchema
 
@@ -19,21 +17,18 @@ def get_user_by_email(id: str):
 def sign_up_user(new_user):
     database["users"].append(new_user)
     return new_user
+def promote_user(user_id: str) -> UserSchema:
+    user = get_user_by_email(user_id)
+    if user['role'] == "normal":
+        user['role'] = "admin"
+        return user
+    else:
+        return None #user is an admin already
 
-def get_all_users() -> list[UserSchema]:
-    user_data = database["users"]
-    books = [UserSchema.model_validate(user) for user in user_data]
-    
-    return books
-
-def block_user(email):
-    i=0
-    for user in database["users"]:
-        if  database["users"][i]["email"]== email:
-            database["users"][i]["blocked"]==True
-
-def unblock_user(email):
-    i=0
-    for user in database["users"]:
-        if  database["users"][i]["email"]== email:
-            database["users"][i]["blocked"]==False
+def demote_user(user_id: str) -> UserSchema:
+    user = get_user_by_email(user_id)
+    if user['role'] == "admin":
+        user['role'] = "normal"
+        return user
+    else:
+        return None #user is normal already

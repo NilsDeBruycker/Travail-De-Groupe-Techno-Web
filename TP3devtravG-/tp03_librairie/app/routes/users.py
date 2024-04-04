@@ -2,13 +2,13 @@ from typing import Annotated
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException, status, Request, Form, Depends, Body
 from app.login_manager import login_manager
-from app.services.users import get_user_by_username,sign_up_user
+from app.services.users import get_user_by_username,sign_up_user,promote_user,demote_user
 from app.schemas import UserSchema
 from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
-import app.services.users as user_service
+
 
 @router.get("/login")
 def go_tosignup(request:Request):    
@@ -28,11 +28,6 @@ def login_route(
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Bad credentials."
-        )
-    if user.blocked==True:
-        return HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="blocked."
         )
     access_token = login_manager.create_access_token(
         data={'sub': user.email}
@@ -60,8 +55,7 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
             "username": username,
             "email": email,
             "password": password,
-            "role":"normal",
-            "blocked":False}
+            "role":"normal"}
         
         try:
             new_user = UserSchema.model_validate(new_user)
@@ -88,14 +82,13 @@ def logout_route():
     )
     return response
 
-@router.post("/block")
-def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
-    user_service.block_user(email)
-    return RedirectResponse(url="/users/", status_code=302)
-@router.post("/unblock")
-def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
-    user_service.unblock_user(email)
-    return RedirectResponse(url="/users/", status_code=302)
+@router.get("/block")
+def go_to_block_page(request:Request,user: UserSchema = Depends(login_manager)):
+    return templates.TemplateResponse(
+        "blockpage.html",
+        context={'request': request}
+    )
+
 
 @router.get("/me")
 def current_user_route(
@@ -115,3 +108,17 @@ def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
         "manage_users.html",
         context={'request': request,'current_user': user ,'users': users}
         )
+@router.put("/promote/{user_id}")
+def promote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can promote users.")
+    promoted_user = promote_user(user_id)
+    return {"message": f"User {promoted_user.username} has been promoted to admin."}
+
+@router.put("/demote/{user_id}")
+def demote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can demote users.")
+    demoted_user = demote_user(user_id)
+    return {"message": f"User {demoted_user.username} has been demoted to normal."}
+from typing import Optional
