@@ -82,6 +82,13 @@ def logout_route():
     )
     return response
 
+@router.get("/block")
+def go_to_block_page(request:Request,user: UserSchema = Depends(login_manager)):
+    return templates.TemplateResponse(
+        "blockpage.html",
+        context={'request': request}
+    )
+
 
 @router.get("/me")
 def current_user_route(
