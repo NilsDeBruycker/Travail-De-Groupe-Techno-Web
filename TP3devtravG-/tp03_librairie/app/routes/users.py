@@ -82,12 +82,14 @@ def logout_route():
     )
     return response
 
-@router.get("/block")
-def go_to_block_page(request:Request,user: UserSchema = Depends(login_manager)):
-    return templates.TemplateResponse(
-        "blockpage.html",
-        context={'request': request}
-    )
+@router.post("/block")
+def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    user_service.block_user(email)
+    return RedirectResponse(url="/users/", status_code=302)
+@router.post("/unblock")
+def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    user_service.unblock_user(email)
+    return RedirectResponse(url="/users/", status_code=302)
 
 
 @router.get("/me")
@@ -108,17 +110,16 @@ def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
         "manage_users.html",
         context={'request': request,'current_user': user ,'users': users}
         )
-@router.put("/promote/{user_id}")
-def promote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+@router.post("/promote")
+def promote_user_route(request:Request,email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can promote users.")
-    promoted_user = promote_user(user_id)
-    return {"message": f"User {promoted_user.username} has been promoted to admin."}
+    promote_user(email)
+    return RedirectResponse(url="/users/", status_code=302)
 
-@router.put("/demote/{user_id}")
-def demote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+@router.post("/demote")
+def demote_user_route(request:Request,email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can demote users.")
-    demoted_user = demote_user(user_id)
-    return {"message": f"User {demoted_user.username} has been demoted to normal."}
-from typing import Optional
+    demote_user(email)
+    return RedirectResponse(url="/users/", status_code=302)

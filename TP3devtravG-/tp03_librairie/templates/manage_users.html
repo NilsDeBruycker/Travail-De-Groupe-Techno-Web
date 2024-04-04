@@ -22,30 +22,30 @@
         <div class="container mt-3">
         <div class="row">
             <div class="col">
-                <form action="/users/rankup" method="post">
+                <form action="/users/promote" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="" name="id" placeholder=" Entrez l'id de l'utilisateur" />
+                        <input type="text" class="form-control" id="email" name="email" placeholder=" Entrez l'email de l'utilisateur" />
                     </div>
                     <button type="submit" class="btn btn-success btn-delete">promouvoir</button>
                 </form>
             <div class="col">
-                <form action="/users/rankdown" method="post">
+                <form action="/users/demote" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="id to rank down" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                        <input type="text" class="form-control" id="email to rank down" name="email" placeholder="Entrez l'email de l'utilisateur" />
                     </div>
                     <button type="submit" class="btn btn-success btn-delete">demouvoir</button>
                 </form>
             <div class="col">
                 <form action="/users/block" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="id_book_to_delete" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                        <input type="text" class="form-control" id="email to block" name="email" placeholder="Entrez l'email de l'utilisateur" />
                     </div>
                     <button type="submit" class="btn btn-success btn-delete">bloquer</button>
                 </form>
             <div class="col">
                 <form action="/users/unblock" method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="id_user_to_unblock" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                        <input type="text" class="form-control" id="email_user_to_unblock" name="email" placeholder="Entrez l'email de l'utilisateur" />
                     </div>
                     <button type="submit" class="btn btn-success btn-delete">debloquer</button>
                 </form>

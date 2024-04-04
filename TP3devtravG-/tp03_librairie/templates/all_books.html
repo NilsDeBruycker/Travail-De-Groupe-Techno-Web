@@ -13,12 +13,12 @@
             <th>Auteur</th>
             <th>Editeur</th>
         </tr>
-        i=0
+        {% set ns = namespace(i = 0) %}
         {% for book in books %}
-        i+=1
             {{ show_books(book.id, book.name, book.Author, book.Editor) }}
+            {% set ns.i = ns.i + 1 %}
         {% endfor %}
-        {total number of books + i}
+        number of books {{ns.i}}
     </table> 
 </div>
 {%if current_user is none%}
