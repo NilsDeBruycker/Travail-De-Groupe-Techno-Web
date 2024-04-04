@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException, status, Request, Form, Depends, Body
 from app.login_manager import login_manager
-from app.services.users import get_user_by_username,sign_up_user
+from app.services.users import get_user_by_username,sign_up_user,promote_user,demote_user
 from app.schemas import UserSchema
 from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
@@ -95,3 +95,17 @@ def current_user_route(
     user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
 ):
     return user
+@router.put("/promote/{user_id}")
+def promote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can promote users.")
+    promoted_user = promote_user(user_id)
+    return {"message": f"User {promoted_user.username} has been promoted to admin."}
+
+@router.put("/demote/{user_id}")
+def demote_user_route(user_id: str, current_user: UserSchema = Depends(login_manager)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can demote users.")
+    demoted_user = demote_user(user_id)
+    return {"message": f"User {demoted_user.username} has been demoted to normal."}
+from typing import Optional
