@@ -4,7 +4,7 @@
 {% if current_user is not none %}
     <h2>Utilisateur connecté : {{ current_user.username }}</h2>
 {% endif %}
-<h1>My Books</h1>
+<h1>USERS</h1>
 <div class="container">
     <table class="table">
         <tr class="position-sticky">
@@ -14,7 +14,7 @@
             <th>blocked</th>
         </tr>
         {% for user in users %}
-            {{ show_users(book.id, book.name, book.Author, book.Editor) }}
+            {{ show_users(user.username, user.email, user.role, user.blocked) }}
         {% endfor %}
     </table> 
 </div>

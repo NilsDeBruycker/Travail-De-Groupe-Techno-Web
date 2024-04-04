@@ -67,6 +67,7 @@ database = {
                "username": "that_guy",
                "email":"realAmaz0n",
                "password":"4795",
+               "role":"normal",
                 "blocked":True}
     ]
 }

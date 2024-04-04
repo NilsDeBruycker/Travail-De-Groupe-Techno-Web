@@ -106,7 +106,12 @@ def current_user_route(
 @router.get("/")
 def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
     users = user_service.get_all_users()
+    if user.role!="admin":
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="only admins can use this page"
+        )
     return templates.TemplateResponse(
-        "all_books.html",
+        "manage_users.html",
         context={'request': request,'current_user': user ,'users': users}
         )

@@ -13,9 +13,12 @@
             <th>Auteur</th>
             <th>Editeur</th>
         </tr>
+        i=0
         {% for book in books %}
+        i+=1
             {{ show_books(book.id, book.name, book.Author, book.Editor) }}
         {% endfor %}
+        {total number of books + i}
     </table> 
 </div>
 {%if current_user is none%}
@@ -39,7 +42,7 @@
                 <a class="btn btn-outline-success btn-modify" href="/books/modify">Modifier un livre</a>
             </div>
             <div class="col">
-                <a class="btn btn-success btn-delete" href="/users/block">bloquer un Utilisateur</a>
+                <a class="btn btn-success btn-delete" href="/users/">gérer les Utilisateur</a>
             </div>
             <div class="col">
                 <form action="/books/delete" method="post">

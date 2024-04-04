@@ -22,11 +22,6 @@ static= StaticFiles(directory="static")
 
 @router.get('/')
 def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optional)):
-    if user.blocked==True:
-        return HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="blocked."
-        )
     Books = service.get_all_books()
     return templates.TemplateResponse(
         "all_books.html",
