@@ -8,9 +8,9 @@ def get_user_by_username(username: str):
     return None
 
 
-def get_user_by_email(id: str):
+def get_user_by_email(email: str):
     for user in database['users']:
-        if user['email'] == id:
+        if user["email"] == email:
             return UserSchema.model_validate(user)
     return None
 

@@ -19,11 +19,10 @@ def go_tosignup(request:Request):
 
 @router.post("/login")
 def login_route(
-        username: Annotated[str, Form()],
         email:Annotated[str, Form()],
         password: Annotated[str, Form()],
 ):
-    user = get_user_by_username(username)
+    user = user_service.get_user_by_email(email)
     if user is None or user.password != password:
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,19 +49,25 @@ def go_tosignup(request:Request):
 
 @router.post("/sign_up")
 def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],password: Annotated[str, Form()],password2: Annotated[str, Form()]):
-    if password==password2:
+    if user_service.get_user_by_email(email) is not None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="email already in use")
+    
+    elif password==password2:
         new_user = {
             "username": username,
             "email": email,
             "password": password,
-            "role":"normal"}
+            "role":"normal",
+            "blocked":False}
         
         try:
-            new_user = UserSchema.model_validate(new_user)
+            new_user_check = UserSchema.model_validate(new_user)
         except ValidationError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid name or author or edditor for the book.",
+                detail="Invalid credential.",
             )
         sign_up_user(new_user)
 
@@ -75,7 +80,7 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
 
 @router.post('/logout')
 def logout_route():
-    response = JSONResponse({'status': 'success'})
+    response = RedirectResponse(url="/books/", status_code=302)
     response.delete_cookie(
         key=login_manager.cookie_name,
         httponly=True

@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from app.login_manager import login_manager
 from app.services.users import get_user_by_username
 from app.schemas import UserSchema
-
+from typing import Optional
 router = APIRouter(prefix="/books", tags=["Books"])
 templates = Jinja2Templates(directory="templates")
 static= StaticFiles(directory="static")
@@ -57,7 +57,7 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
 
 
 @router.post('/new')
-def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor: Annotated[str, Form()]):
+def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor:Annotated[str, Form()]='none'):
     new_book_data = {
         "id": str(uuid4()),
         "name": name,
@@ -65,13 +65,13 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
         "Editor":Editor,
     }
     try:
-        new_book = Book.model_validate(new_book_data)
+        new_book_test = Book.model_validate(new_book_data)
     except ValidationError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or author or edditor for the book.",
         )
-    service.save_book(new_book)
+    service.save_book(new_book_data)
     return RedirectResponse(url="/books/", status_code=302)
 
 @router.get('/modify')
@@ -97,7 +97,7 @@ def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.opti
     )
 
 @router.post('/modify')
-def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor: Annotated[str, Form()]):
+def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor: Annotated[str, Form()]="none"):
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -110,7 +110,7 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
         "Editor":Editor,
     }
     try:
-        new_book = Book.model_validate(new_book_data)
+        new_book_test = Book.model_validate(new_book_data)
     except ValidationError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -120,7 +120,7 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
         return HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="error one of the field is empty or only contain white space")
-    service.modify_book_by_id(id,new_book)
+    service.modify_book_by_id(id,new_book_data)
     return RedirectResponse(url="/books/", status_code=302)
 
 
