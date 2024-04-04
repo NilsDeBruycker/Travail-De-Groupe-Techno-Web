@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
-
+import app.services.users as user_service
 
 @router.get("/login")
 def go_tosignup(request:Request):    
