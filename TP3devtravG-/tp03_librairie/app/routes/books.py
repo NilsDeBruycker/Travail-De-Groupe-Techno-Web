@@ -23,7 +23,6 @@ static= StaticFiles(directory="static")
 @router.get('/')
 def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optional)):
     Books = service.get_all_books()
-
     return templates.TemplateResponse(
         "all_books.html",
         context={'request': request,'current_user': user ,'books': Books}
@@ -41,7 +40,11 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
         "login.html",
         context={'request': request,}
     )
-
+    elif user.role!="admin":
+        return HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="only admins can use this page"
+        )
     return templates.TemplateResponse(
         "new_book.html",
         context={'request': request,}
@@ -68,11 +71,16 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
 
 @router.get('/modify')
 def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.optional)):
-    if user==None:
+    if user is None:
         return templates.TemplateResponse(
         "login.html",
         context={'request': request,}
     ) #depends renvoie a login si pas conecté
+    elif user.role!="admin":
+        return HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="only admins can use this page"
+        )
     return templates.TemplateResponse(
         "modify_book.html",
         context={'request': request,}
@@ -108,10 +116,16 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
 
 @router.post('/delete')
 def deletebook(id: Annotated[str, Form()], user: UserSchema = Depends(login_manager.optional)):
-    if user==None:
+    if user is None:
         return templates.TemplateResponse(
-        "login.html" #pourait pas marcher
+        "login.html"
     )
+    elif user.role=="normal":
+        return HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="only admins can use this page"
+        )
+   
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
