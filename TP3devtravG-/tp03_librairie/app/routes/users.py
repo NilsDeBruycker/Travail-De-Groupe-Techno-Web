@@ -8,7 +8,7 @@ from pydantic import ValidationError
 from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
-
+import app.services.users as user_service
 
 @router.get("/login")
 def go_tosignup(request:Request):    
@@ -28,6 +28,11 @@ def login_route(
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Bad credentials."
+        )
+    if user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
         )
     access_token = login_manager.create_access_token(
         data={'sub': user.email}
@@ -55,7 +60,8 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
             "username": username,
             "email": email,
             "password": password,
-            "role":"normal"}
+            "role":"normal",
+            "blocked":False}
         
         try:
             new_user = UserSchema.model_validate(new_user)
@@ -82,16 +88,25 @@ def logout_route():
     )
     return response
 
-@router.get("/block")
-def go_to_block_page(request:Request,user: UserSchema = Depends(login_manager)):
-    return templates.TemplateResponse(
-        "blockpage.html",
-        context={'request': request}
-    )
-
+@router.post("/block")
+def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    user_service.block_user(email)
+    return RedirectResponse(url="/users/", status_code=302)
+@router.post("/unblock")
+def go_to_block_page(request:Request,email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    user_service.unblock_user(email)
+    return RedirectResponse(url="/users/", status_code=302)
 
 @router.get("/me")
 def current_user_route(
     user: UserSchema = Depends(login_manager), #depends renvoie ereure si pas conecté
 ):
     return user
+
+@router.get("/")
+def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
+    users = user_service.get_all_users()
+    return templates.TemplateResponse(
+        "all_books.html",
+        context={'request': request,'current_user': user ,'users': users}
+        )

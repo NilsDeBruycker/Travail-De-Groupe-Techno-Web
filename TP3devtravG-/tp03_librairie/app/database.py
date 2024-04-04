@@ -56,11 +56,13 @@ database = {
             {"username":"jon",
             "email":"arbucle@gmail.com",
             "password":"1234",
-            "role":"normal"},
+            "role":"normal",
+            "blocked": False},
             {"username":"joseph",
             "email":"joseph@gmail.com",
             "password":"5482",
-            "role":"admin"}
+            "role":"admin",
+            "blocked" :False}
 
     ]
 }
