@@ -1,3 +1,5 @@
 fastapi
-pydantic
+fastapi-login
+jinja2
+python-multipart
 uvicorn
