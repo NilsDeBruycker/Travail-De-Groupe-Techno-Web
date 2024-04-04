@@ -4,3 +4,4 @@ class UserSchema(BaseModel):
     email: str
     password: str
     role: str
+    blocked: bool

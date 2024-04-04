@@ -1,0 +1,55 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_users %}
+{% block content %}
+{% if current_user is not none %}
+    <h2>Utilisateur connecté : {{ current_user.username }}</h2>
+{% endif %}
+<h1>My Books</h1>
+<div class="container">
+    <table class="table">
+        <tr class="position-sticky">
+            <th>username</th>
+            <th>email</th>
+            <th>role</th>
+            <th>blocked</th>
+        </tr>
+        {% for user in users %}
+            {{ show_users(book.id, book.name, book.Author, book.Editor) }}
+        {% endfor %}
+    </table> 
+</div>
+
+        <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <form action="/users/rankup" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="" name="id" placeholder=" Entrez l'id de l'utilisateur" />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-delete">promouvoir</button>
+                </form>
+            <div class="col">
+                <form action="/users/rankdown" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="id to rank down" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-delete">demouvoir</button>
+                </form>
+            <div class="col">
+                <form action="/users/block" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="id_book_to_delete" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-delete">bloquer</button>
+                </form>
+            <div class="col">
+                <form action="/users/unblock" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="id_user_to_unblock" name="id" placeholder="Entrez l'id de l'utilisateur" />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-delete">debloquer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -22,6 +22,11 @@ static= StaticFiles(directory="static")
 
 @router.get('/')
 def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optional)):
+    if user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
+        )
     Books = service.get_all_books()
     return templates.TemplateResponse(
         "all_books.html",
@@ -40,9 +45,14 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
         "login.html",
         context={'request': request,}
     )
+    elif user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
+        )
     elif user.role!="admin":
         return HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="only admins can use this page"
         )
     return templates.TemplateResponse(
@@ -76,6 +86,11 @@ def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.opti
         "login.html",
         context={'request': request,}
     ) #depends renvoie a login si pas conecté
+    elif user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
+        )
     elif user.role!="admin":
         return HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -120,7 +135,12 @@ def deletebook(id: Annotated[str, Form()], user: UserSchema = Depends(login_mana
         return templates.TemplateResponse(
         "login.html"
     )
-    elif user.role=="normal":
+    elif user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
+        )
+    elif user.role!="admin":
         return HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="only admins can use this page"
