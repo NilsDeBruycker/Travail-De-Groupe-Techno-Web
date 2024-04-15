@@ -13,4 +13,5 @@ class User(Base):
     username    : Mapped[str] = mapped_column(String(72), unique=True)
     password    : Mapped[str] = mapped_column(String(72))
     blocked     : Mapped[bool]=mapped_column(bool)
-    children: Mapped[list["Book"]] = relationship()
+    role        : Mapped[str] = mapped_column(String(7))
+    books: Mapped[list["Book"]] = relationship()

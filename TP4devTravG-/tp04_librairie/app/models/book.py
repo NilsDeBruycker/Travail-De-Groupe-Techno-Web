@@ -14,5 +14,5 @@ class Book(Base):
     Prix : Mapped[Optional[str]] = mapped_column(String(2048), nullable=True)
     status = mapped_column(DateTime)
     
-    book_id: Mapped[int] = mapped_column(ForeignKey("Users.id"))
-    book: Mapped["User"] = relationship()
+    owner_id: Mapped[int] = mapped_column(ForeignKey("Users.id"))
+    owner: Mapped["User"] = relationship()
