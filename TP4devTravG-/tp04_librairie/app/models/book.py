@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship,CheckConstraint
 from sqlalchemy import String, DateTime, ForeignKey,Boolean
 
 from app.database import Base
@@ -10,12 +10,14 @@ class Book(Base):
     
     id = mapped_column(String(72), primary_key=True)
     name = mapped_column(String(72))
-    Prix : Mapped[Optional[str]] = mapped_column(String(2048), nullable=True)
+    Prix = mapped_column(float())
     status = mapped_column(DateTime)
     
     owner_id: Mapped[int] = mapped_column(ForeignKey("Users.id"))
     owner: Mapped["User"] = relationship()
-
+__table_args__ = (
+        CheckConstraint('Prix > 0', name='check_positive_price'),
+    )
 class User(Base):
     __tablename__ = 'users'
     
