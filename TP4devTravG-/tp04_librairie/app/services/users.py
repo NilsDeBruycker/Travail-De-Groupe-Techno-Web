@@ -1,6 +1,8 @@
 from app.database import database
 from app.schemas import UserSchema
-
+from sqlalchemy.orm import Session
+from app.models.book import User  
+from sqlalchemy import select
 def get_user_by_username(username: str):
     for user in database['users']:
         if user['username'] == username:
@@ -51,3 +53,10 @@ def demote_user(email: str) -> UserSchema:
         if  database["users"][i]["email"]== email:
             database["users"][i]["role"]="normal"
         i+=1
+def delete_user_by_id( user_id: str):
+    with Session as session:
+        statement = select(User).filter_by(id=user_id)
+        user = session.execute(statement).scalar_one()
+        session.delete(user)
+        session.commit()
+    
