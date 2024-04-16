@@ -1,10 +1,9 @@
 from typing import Optional
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, DateTime, ForeignKey
+from sqlalchemy import String, DateTime, ForeignKey,Boolean
 
 from app.database import Base
-from app.models.users import User
 
 class Book(Base):
     __tablename__ = "books"
@@ -16,3 +15,13 @@ class Book(Base):
     
     owner_id: Mapped[int] = mapped_column(ForeignKey("Users.id"))
     owner: Mapped["User"] = relationship()
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id          : Mapped[str] = mapped_column(String(72), primary_key=True)
+    username    : Mapped[str] = mapped_column(String(72), unique=True)
+    password    : Mapped[str] = mapped_column(String(72))
+    blocked     : Mapped[Boolean]=mapped_column(Boolean)
+    role        : Mapped[str] = mapped_column(String(7))
+    books: Mapped[list["Book"]] = relationship()

@@ -1,5 +1,5 @@
 from app.schemas import Book
-from app.database import database
+from app.database import Session
 
 
 def save_book(new_book: Book) -> Book:
