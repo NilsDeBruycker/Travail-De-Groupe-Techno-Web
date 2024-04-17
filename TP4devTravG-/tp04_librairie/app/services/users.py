@@ -11,9 +11,11 @@ def get_user_by_username(username: str):
         user = session.scalar(statement) 
         if user is not None:
             return UserSchema(
-                id=user.id,
                 username=user.username,
+                email=user.email,
                 password=user.password,
+                role=user.role,
+                blocked=user.blocked,
             )
     return None
 
@@ -24,9 +26,11 @@ def get_user_by_email(email: str):
         user = session.scalar(statement) 
         if user is not None:
             return UserSchema(
-                id=user.id,
                 email=user.email,
+                username=user.username,
                 password=user.password,
+                user=user.role,
+                blocked=user.blocked,
             )
     return None
 
