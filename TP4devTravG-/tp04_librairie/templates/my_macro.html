@@ -1,4 +1,4 @@
-{% macro show_books(id,name, Author, edditor) %}
+{% macro show_books(id,name, Author, edditor,owner,price,status) %}
     <tr>
         <td>{{id}}</td>
         
@@ -7,6 +7,9 @@
         <td>{{Author}}</td>
 
         <td>{{edditor}}</td>
+        <td>{{owner}}</td>
+        <td>{{price}}</td>
+        <td>{{status}}</td>
     </tr>
 {% endmacro %}
 

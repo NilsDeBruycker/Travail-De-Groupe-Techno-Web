@@ -23,13 +23,14 @@ def save_book(new_book: Book) -> Book:
      books_data = session.scalars(statement).unique().all()
         return [
             Book(
-                id=task.id,
-                name=task.name,
-                description=task.description,
-                creation_date=task.creation_date,
+                id=book.id,
+                name=book.name,
+                prix=book.prix,
+                owner=book.owner,
+                status=book.status
                 
             
-            for task in tasks_data
+            for book in book_data
         ]"""
 
 def delete_book_by_id(book_id:str):
