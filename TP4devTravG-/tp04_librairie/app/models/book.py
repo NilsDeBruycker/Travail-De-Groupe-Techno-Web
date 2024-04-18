@@ -24,7 +24,7 @@ class Book(Base):
     Prix = mapped_column(FLOAT(3,3)) # pas sur que bon type
     status = mapped_column(DateTime)
     
-    owner_id: Mapped[int] = mapped_column(ForeignKey("users.email"))
+    owner_email: Mapped[int] = mapped_column(ForeignKey("users.email"))
     owner: Mapped["User"] = relationship()
 __table_args__ = (
         CheckConstraint('Prix > 0', name='check_positive_price'),
