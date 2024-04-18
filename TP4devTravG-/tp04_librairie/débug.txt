@@ -17,5 +17,5 @@ user me
 user all
 promote 
 demote 
-modify user(profile/nom utilisateur) NILS
+modify user(profile/nom utilisateur) débeugé
 new pasword

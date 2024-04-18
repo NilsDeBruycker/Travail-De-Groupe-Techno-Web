@@ -133,7 +133,7 @@ def demote_user_route(email:Annotated[str, Form()], current_user: UserSchema = D
 
 @router.get("/profile")
 def go_to_profile(request:Request,user: UserSchema = Depends(login_manager)):
-    Books=books_service.get_own_books(user.email)
+    Books=books_service.get_own_books(user)
     return templates.TemplateResponse(
         "see_profile.html",
         context={'request': request,"books":Books,'current_user': user}
@@ -142,9 +142,11 @@ def go_to_profile(request:Request,user: UserSchema = Depends(login_manager)):
 @router.post("/modify")
 def modify_profile(new_username:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     user_service.modify_user(new_username,current_user)
+    return RedirectResponse(url="/users/profile", status_code=302)
+
 
 @router.post("/new_password")
 def redo_password(email:Annotated[str, Form()],password: Annotated[str, Form()],password2: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
     if password==password2:
         user_service.change_password(user.email ,hashlib.sha3_256(password).hexdigest())
-
+    return RedirectResponse(url="/users/profile", status_code=302)

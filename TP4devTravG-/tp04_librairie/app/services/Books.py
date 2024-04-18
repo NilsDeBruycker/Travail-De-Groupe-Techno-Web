@@ -40,9 +40,9 @@ def get_public_book():
         for book in books_data
     ]
 
-def get_own_books(user_email):
+def get_own_books(user):
     with Session() as session:
-     statement = select(Book).filter(Book.owner_email==user_email)
+     statement = select(Book).filter(Book.owner_email==user.email)
      books_data = session.scalars(statement).unique().all()
     return [
         Book(
