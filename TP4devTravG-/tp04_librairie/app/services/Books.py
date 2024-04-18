@@ -76,9 +76,10 @@ def get_all_books() -> list[Book]:
 def delete_book_by_id(book_id:str):
     with Session() as session:
         statement=select(Book).filter_by(id=book_id)
-        book=session.execute(statement).scalar_one()
+        book=session.scalars(statement).one()
         session.delete(book)
         session.commit()
+        
 def is_book_exist(book_id:str):
     with Session() as session:
         statement=select(Book).filter_by(id=book_id)
@@ -91,7 +92,7 @@ def is_book_exist(book_id:str):
 def get_book_by_id(book_id):
      with Session() as session:
         statement=select(Book).filter_by(id=book_id)
-        book=session.execute(statement).scalar_one()
+        book=session.scalars(statement).one()
         return Book(
             id=book.id,
             name=book.name,

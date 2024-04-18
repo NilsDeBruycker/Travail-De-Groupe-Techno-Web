@@ -22,11 +22,20 @@ static= StaticFiles(directory="static")
 
 @router.get('/')
 def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optional)):
-    Books = service.get_all_books()
+    
+    if user is not None:
+        if user.role=="admin":
+            Books = service.get_all_books()
+        else: 
+            Books= service.get_public_book
+            Books= {**Books,**service.get_own_books(user)}
+    else:
+        Books = service.get_public_book()
     return templates.TemplateResponse(
-        "all_books.html",
-        context={'request': request,'current_user': user ,'books': Books}
-        )
+            "all_books.html",
+            context={'request': request,'current_user': user ,'books': Books}
+            )
+
 
     
 
@@ -155,8 +164,8 @@ def deletebook(id: Annotated[str, Form()], user: UserSchema = Depends(login_mana
     return RedirectResponse(url="/books/", status_code=302)
 
 @router.post('/sell')
-def sell_book(book_id: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
-    book=service.get_book_by_id(book_id)
+def sell_book(id: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    book=service.get_book_by_id(id)
     if book is None:
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -184,4 +193,82 @@ def sell_book(book_id: Annotated[str, Form()],user: UserSchema = Depends(login_m
         }
         service.modify_book_by_id(book.id,modified_book)
 
+@router.post('/unsell')
+def retire_book_from_sale(id: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    book=service.get_book_by_id(id)
+    if book is None:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+                detail=" book not found"
+        )
+    if user.email!=book.owner_email and user.role!="admin":
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="that book is not yours."
+        )
+    elif book.status=="privé":
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="already private"
+        )
+    else:
+        modified_book={
+            "Author":book.Author,
+            "Edditor":book.Edditor,
+            "id":book.id,
+            "name":book.name,
+            "Prix":book.Prix,
+            "owner":book.owner,
+            "status":"privé",
+        }
+        service.modify_book_by_id(book.id,modified_book)
 
+@router.post('/buy')
+def buy_book(id:Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    book=service.get_book_by_id(id)
+    if book is None:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+                detail=" book not found"
+        )
+    if book.status!="en vente":
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="that book is not for sale."
+        )
+    else:
+        modified_book={
+            "Author":book.Author,
+            "Edditor":book.Edditor,
+            "id":book.id,
+            "name":book.name,
+            "Prix":book.Prix,
+            "owner": user.email,
+            "status":"privé",
+        }
+        service.modify_book_by_id(book.id,modified_book)
+
+@router.post("/change_price")
+def change_book_price(id:Annotated[str, Form()],price:Annotated[float, Form()],user: UserSchema = Depends(login_manager)):
+    book=service.get_book_by_id(id)
+    if book is None:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+                detail=" book not found"
+        )
+    if book.status!="en vente":
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Price is already that."
+        )
+    else:
+        modified_book={
+            "Author":book.Author,
+            "Edditor":book.Edditor,
+            "id":book.id,
+            "name":book.name,
+            "Prix":price,
+            "owner": book.owner,
+            "status":"privé",
+        }
+        service.modify_book_by_id(book.id,modified_book)

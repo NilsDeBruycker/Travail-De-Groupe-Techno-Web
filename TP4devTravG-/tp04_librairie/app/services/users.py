@@ -95,10 +95,23 @@ def demote_user(email: str) -> User:
 
     return user
 
-def delete_user_by_id( user_id: str):
+def delete_user_by_email( email: str):
     with Session() as session:
-        statement = select(User).filter_by(id=user_id)
+        statement = select(User).filter_by(id=email)
         user = session.execute(statement).scalar_one()
         session.delete(user)
         session.commit()
-    
+
+def modify_user(new_username,curent_user:User):
+     with Session() as session:
+        statement = select(User).filter_by(id=curent_user.email)
+        user = session.scalars(statement).one()
+        user.username=new_username
+        session.commit()
+
+def change_password(email,new_pasword):
+    with Session() as session:
+        statement = select(User).filter_by(id=email)
+        user = session.scalars(statement).one()
+        user.password=new_pasword
+        session.commit()

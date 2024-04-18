@@ -32,6 +32,12 @@
         <button type="submit" class="btn btn-success btn-delete"> log_out</button>
     </form>
 </div>
+<form action="/books/buy" method="post">
+    <div class="form-group">
+        <input type="text" class="form-control" id="id_book_to_buy" name="id" placeholder="Entrez l'id du livre à acheter" />
+    </div>
+    <button type="submit" class="btn btn-success btn-delete">acheter un livre</button>
+</form>
     {%if current_user.role == "admin"%}
         <div class="container mt-3">
         <div class="row">

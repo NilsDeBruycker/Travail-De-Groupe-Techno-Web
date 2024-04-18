@@ -1,3 +1,4 @@
+import hashlib
 from typing import Annotated
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi import APIRouter, HTTPException, status, Request, Form, Depends, Body
@@ -9,7 +10,7 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter(prefix="/users")
 templates = Jinja2Templates(directory="templates")
 import app.services.users as user_service
-
+import app.services.Books as books_service
 @router.get("/login")
 def go_tosignup(request:Request):    
     return templates.TemplateResponse(
@@ -23,7 +24,7 @@ def login_route(
         password: Annotated[str, Form()],
 ):
     user = user_service.get_user_by_email(email)
-    if user is None or user.password != password:
+    if user is None or hashlib.sha3_256(user.password).hexdigest()!= password:
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Bad credentials."
@@ -58,7 +59,7 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
         new_user = {
             "username": username,
             "email": email,
-            "password": password,
+            "password": hashlib.sha3_256(password).hexdigest(),
             "role":"normal",
             "blocked":False}
         
@@ -128,3 +129,21 @@ def demote_user_route(email:Annotated[str, Form()], current_user: UserSchema = D
         raise HTTPException(status_code=403, detail="Only admins can demote users.")
     demote_user(email)
     return RedirectResponse(url="/users/", status_code=302)
+
+@router.get("/profile")
+def go_to_profile(request:Request,user: UserSchema = Depends(login_manager)):
+    Books=books_service.get_own_books(user.email)
+    return templates.TemplateResponse(
+        "seeprofile.html",
+        context={'request': request,"books":Books,'current_user': user}
+        )
+
+@router.post("/modify")
+def modify_profile(new_username:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
+    user_service.modify_user(new_username,current_user)
+
+@router.post("/new_password")
+def redo_password(email:Annotated[str, Form()],password: Annotated[str, Form()],password2: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    if password==password2:
+        user_service.change_password(user.email ,hashlib.sha3_256(password).hexdigest())
+
