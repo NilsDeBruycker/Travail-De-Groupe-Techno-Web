@@ -6,7 +6,7 @@ from sqlalchemy import select
 
 def get_user_by_username(username: str):
     with Session() as session:
-        statement = select(User).filter_by(username=username)
+        statement = select(User).filter(User.username==username)
         user = session.scalar(statement) 
         if user is not None:
             return UserSchema(
@@ -103,21 +103,21 @@ def demote_user(email: str) -> User:
 
 def delete_user_by_email( email: str):
     with Session() as session:
-        statement = select(User).filter_by(id=email)
+        statement = select(User).filter(User.email==email)
         user = session.execute(statement).scalar_one()
         session.delete(user)
         session.commit()
 
 def modify_user(new_username,curent_user:User):
      with Session() as session:
-        statement = select(User).filter_by(email=curent_user.email)
+        statement = select(User).filter(User.email==curent_user.email)
         user = session.scalars(statement).one()
         user.username=new_username
         session.commit()
 
 def change_password(email,new_pasword):
     with Session() as session:
-        statement = select(User).filter_by(id=email)
+        statement = select(User).filter(User.email==email)
         user = session.scalars(statement).one()
         user.password=new_pasword
         session.commit()

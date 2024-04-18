@@ -24,7 +24,7 @@ def save_book(new_book: Bookshemat):
 
 def get_public_book():
     with Session() as session:
-     statement = select(Book).filter_by(status="en vente")
+     statement = select(Book).filter(Book.status=="en vente")
      books_data = session.scalars(statement).unique().all()
     return [
         Book(
@@ -78,14 +78,14 @@ def get_all_books() -> list[Book]:
 
 def delete_book_by_id(book_id:str):
     with Session() as session:
-        statement=select(Book).filter_by(id=book_id)
+        statement=select(Book).filter(Book.id==book_id)
         book=session.scalars(statement).one()
         session.delete(book)
         session.commit()
 
 def is_book_exist(book_id:str):
     with Session() as session:
-        statement=select(Book).filter_by(id=book_id)
+        statement=select(Book).filter(Book.id==book_id)
         book=session.scalar(statement)
         if book is not None:
             return True
@@ -94,7 +94,7 @@ def is_book_exist(book_id:str):
 
 def get_book_by_id(book_id):
      with Session() as session:
-        statement=select(Book).filter_by(id=book_id)
+        statement=select(Book).filter(Book.id==book_id)
         book=session.scalars(statement).one()
         return Book(
             id=book.id,
@@ -108,7 +108,7 @@ def get_book_by_id(book_id):
 
 def modify_book_by_id(book_id: str,modified_book) -> Book | None:
     with Session() as session:
-        statement=select(Book).filter_by(id=book_id)
+        statement=select(Book).filter(Book.id==book_id)
         book=session.scalars(statement).one()
         book.owner_email=modified_book["Owner"]
         book.name=modified_book["name"]
