@@ -42,7 +42,7 @@ def get_public_book():
 
 def get_own_books(user):
     with Session() as session:
-     statement = select(Book).filter_by(owner=user.email)
+     statement = select(Book).filter(Book.owner_email==user.email)
      books_data = session.scalars(statement).unique().all()
     return [
         Book(

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, DateTime, ForeignKey,Boolean,CheckConstraint,FLOAT
+from sqlalchemy import String, DateTime, ForeignKey,Boolean,CheckConstraint,Float
 
 from app.database import Base
 
@@ -21,15 +21,16 @@ class Book(Base):
     
     id = mapped_column(String(72), primary_key=True)
     name = mapped_column(String(72))
-    Prix = mapped_column(FLOAT(3,3)) # pas sur que bon type
-    status = mapped_column(String(72))
+    Prix = mapped_column(Float) # pas sur que bon type
+    status = mapped_column(String(72),)
     Author=mapped_column(String(72))
-    Editor= mapped_column(String(72)) #metre optionel
+    Editor= mapped_column(String(72),nullable=True) #metre optionel
     
-    owner_email: Mapped[int] = mapped_column(ForeignKey("users.email"))
+    owner_email: Mapped[int] = mapped_column(ForeignKey("users.email"),nullable=True)
     owner: Mapped["User"] = relationship()
-__table_args__ = (
-        CheckConstraint('Prix > 0', name='check_positive_price'),
-    )
+
+    __table_args__ = (
+            CheckConstraint('Prix > 0', name='check_positive_price'),
+        )
 
 

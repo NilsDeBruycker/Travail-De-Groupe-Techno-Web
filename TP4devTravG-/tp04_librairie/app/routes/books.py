@@ -25,15 +25,17 @@ def get_all_Books(request:Request,user: UserSchema = Depends(login_manager.optio
     
     if user is not None:
         if user.role=="admin":
-            Books = service.get_all_books()
+            books = service.get_all_books()
         else: 
-            Books= service.get_public_book
-            Books= {**Books,**service.get_own_books(user)}
+            books= service.get_public_book()
+            books_self=service.get_own_books(user)
+
+            books= books+books_self
     else:
-        Books = service.get_public_book()
+        books = service.get_public_book()
     return templates.TemplateResponse(
             "all_books.html",
-            context={'request': request,'current_user': user ,'books': Books}
+            context={'request': request,'current_user': user ,'books': books}
             )
 
 
@@ -110,7 +112,7 @@ def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.opti
     )
 
 @router.post('/modify')
-def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[str, Form()]=0,Editor: Annotated[str, Form()]="none"):
+def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],Author: Annotated[str, Form()],Owner: Annotated[str, Form()]=None,Prix: Annotated[str, Form()]=0,Editor: Annotated[str, Form()]="none"):
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

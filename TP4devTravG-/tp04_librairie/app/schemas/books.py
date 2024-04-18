@@ -7,5 +7,5 @@ class Book(BaseModel):
     Author: str = Field(min_length=3, max_length=50)
     Editor: Optional[str] = Field(min_length=3, max_length=50)
     Prix:float=Field(ge=0)
-    Owner:str= Field(min_length=3, max_length=50)
+    Owner:Optional[str] = Field(min_length=3, max_length=50)
     status:str= Field(min_length=3, max_length=50)

@@ -14,7 +14,7 @@ Session = sessionmaker(engine)
 class Base(DeclarativeBase):
     pass
 
-from app.models.book import Book
+from app.models.book import Book, User
 
 
 def create_database():

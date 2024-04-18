@@ -24,7 +24,7 @@ def login_route(
         password: Annotated[str, Form()],
 ):
     user = user_service.get_user_by_email(email)
-    if user is None or hashlib.sha3_256(user.password).hexdigest()!= password:
+    if user is None or user.password!= hashlib.sha3_256(password.encode()).hexdigest():
         return HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Bad credentials."
@@ -56,6 +56,7 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
             detail="email already in use")
     
     elif password==password2:
+        password=password.encode()
         new_user = {
             "username": username,
             "email": email,
@@ -64,7 +65,7 @@ def sign_up_route(username: Annotated[str, Form()],email:Annotated[str, Form()],
             "blocked":False}
         
         try:
-            new_user_check = UserSchema.model_validate(new_user)
+            new_user = UserSchema.model_validate(new_user)
         except ValidationError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

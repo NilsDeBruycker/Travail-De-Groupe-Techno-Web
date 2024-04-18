@@ -1,5 +1,5 @@
 from app.schemas import UserSchema
-from sqlalchemy.orm import Session
+from app.database import Session
 from app.models.book import User  
 from sqlalchemy import select
 
@@ -21,22 +21,28 @@ def get_user_by_username(username: str):
 
 def get_user_by_email(email: str):
     with Session() as session:
-        statement = select(User).filter_by(email=email)
+        statement = select(User).filter(User.email==email)
         user = session.scalar(statement) 
         if user is not None:
             return UserSchema(
                 email=user.email,
                 username=user.username,
                 password=user.password,
-                user=user.role,
+                role=user.role,
                 blocked=user.blocked,
             )
     return None
 
 
-def sign_up_user(new_user):
+def sign_up_user(new_user:UserSchema):
     with Session() as session:
-       session.add(new_user)
+       new_user_instance= User(
+                email=new_user.email,
+                username=new_user.username,
+                password=new_user.password,
+                role=new_user.role,
+                blocked=new_user.blocked,)
+       session.add(new_user_instance)
        session.commit()
     return new_user
 
