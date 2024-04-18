@@ -17,40 +17,42 @@ def save_book(new_book: Book) -> Book:
         session.commit()
 
 
-"""def get_all_books() -> list[Book]:
+def get_all_books() -> list[Book]:
     with Session() as session:
      statement = select(Book)
      books_data = session.scalars(statement).unique().all()
-        return [
-            Book(
-                id=book.id,
-                name=book.name,
-                prix=book.prix,
-                owner=book.owner,
-                status=book.status
-                
-            
-            for book in book_data
-        ]"""
+    return [
+        Book(
+            id=book.id,
+            name=book.name,
+            prix=book.prix,
+            owner=book.owner,
+            status=book.status,
+        )
+        
+        for book in books_data
+    ]
 
 def delete_book_by_id(book_id:str):
-    with Session as session:
+    with Session() as session:
         statement=select(Book).filter_by(id=book_id)
         book=session.execute(statement).scalar_one()
         session.delete(book)
         session.commit()
 def is_book_exist(book_id:str):
-    i=0
-    for book in database["books"]:
-        if  database["books"][i]["id"]== book_id:
-
+    with Session() as session:
+        statement=select(Book).filter_by(id=book_id)
+        book=session.scalar(statement)
+        if book is not None:
             return True
-        i+=1
-    return False
+        else :
+            return False
 
 def modify_book_by_id(book_id: str,modified_book) -> Book | None:
-    i=0
-    for book in database["books"]:
-        if  database["books"][i]["id"]== book_id:
-            database["books"][i] =modified_book 
-        i+=1
+    with Session() as session:
+        statement=select(Book).filter_by(id=book_id)
+        book=session.scalars(statement).one()
+        book.owner_email=modified_book["Owner"]
+        book.name=modified_book["name"]
+        book.Prix=modified_book["prix"]
+        session.commit()

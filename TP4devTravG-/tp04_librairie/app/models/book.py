@@ -19,7 +19,7 @@ class User(Base):
 class Book(Base):
     __tablename__ = "books"
     
-    email = mapped_column(String(72), primary_key=True)
+    id = mapped_column(String(72), primary_key=True)
     name = mapped_column(String(72))
     Prix = mapped_column(FLOAT(3,3)) # pas sur que bon type
     status = mapped_column(DateTime)

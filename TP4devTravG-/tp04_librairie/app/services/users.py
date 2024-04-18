@@ -42,46 +42,60 @@ def sign_up_user(new_user):
 
 
 
-def get_all_users(session: Session) :
-    users = session.query(User).all()
-
-    return users
-
-
-
-def block_user(session: Session, email: str):
-    user = session.query(User).filter(User.email == email).first()
-    if user:
-        user.blocked = True
-        session.commit()
-
-
-def ublock_user(session: Session, email: str):
-    user = session.query(User).filter(User.email == email).first()
-    if user:
-        user.blocked = False
-        session.commit()
+def get_all_users() :
+    with Session() as session:
+        statement = select(User)
+        users_data = session.scalars(statement).unique().all()
+        return [
+            User(
+                email=user.email,
+                username=user.username,
+                role=user.role,
+                blocked=user.blocked,
+            )     
+            
+            for user in users_data
+        ]
 
 
-def promote_user(session: Session, email: str) -> User:
-    user = session.query(User).filter(User.email == email).first()
-    if user:
-        user.role = "admin"
-        session.commit()
+
+def block_user(email: str):
+    with Session() as session:
+        user = session.query(User).filter(User.email == email).first()
+        if user is not None:
+            user.blocked = True
+            session.commit()
+
+
+def unblock_user(email: str):
+    with Session() as session:
+        user = session.query(User).filter(User.email == email).first()
+        if user is not None:
+            user.blocked = False
+            session.commit()
+
+
+def promote_user(email: str) -> User:
+    with Session() as session:    
+        user = session.query(User).filter(User.email == email).first()
+        if user is not None:
+            user.role = "admin"
+            session.commit()
 
     return user
 
 
-def demote_user(session: Session, email: str) -> User:
-    user = session.query(User).filter(User.email == email).first()
-    if user:
-        user.role = "normal"
-        session.commit()
+def demote_user(email: str) -> User:
+    with Session() as session:
+        user = session.query(User).filter(User.email == email).first()
+        if user:
+            user.role = "normal"
+            session.commit()
 
     return user
 
 def delete_user_by_id( user_id: str):
-    with Session as session:
+    with Session() as session:
         statement = select(User).filter_by(id=user_id)
         user = session.execute(statement).scalar_one()
         session.delete(user)
