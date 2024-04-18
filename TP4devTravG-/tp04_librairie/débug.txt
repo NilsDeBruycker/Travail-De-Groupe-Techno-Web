@@ -13,8 +13,10 @@ change price
 login debugé
 signup débeugé
 logout débeugé
-user me
+user me pas beugé
 user all
+get user email
+get user by name ? peut etre suprimer car plusieurs utilisateur peuva avoir meme nom
 promote 
 demote 
 modify user(profile/nom utilisateur) débeugé
