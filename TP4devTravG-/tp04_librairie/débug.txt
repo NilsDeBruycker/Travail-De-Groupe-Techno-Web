@@ -1,0 +1,21 @@
+get all débeugé? plus de doné et livre requis pour les get NILS
+get own
+get public
+
+modify
+delete
+sell
+unsell
+block
+unblock
+buy
+change price
+login
+signup
+logout débeugé
+user me
+user all
+promot 
+demote 
+modify user(profile)
+new pasword
