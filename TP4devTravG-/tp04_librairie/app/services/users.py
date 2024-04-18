@@ -1,4 +1,3 @@
-from app.database import database
 from app.schemas import UserSchema
 from sqlalchemy.orm import Session
 from app.models.book import User  

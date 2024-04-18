@@ -57,12 +57,15 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
 
 
 @router.post('/new')
-def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor:Annotated[str, Form()]='none'):
+def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[str, Form()]=0,Editor:Annotated[str, Form()]='none'):
     new_book_data = {
         "id": str(uuid4()),
         "name": name,
         "Author": Author,
         "Editor":Editor,
+        "Prix":Prix,
+        "Owner": Owner,
+        
     }
     try:
         new_book_test = Book.model_validate(new_book_data)
@@ -97,7 +100,7 @@ def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.opti
     )
 
 @router.post('/modify')
-def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author: Annotated[str, Form()],Editor: Annotated[str, Form()]="none"):
+def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[str, Form()]=0,Editor: Annotated[str, Form()]="none"):
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -108,6 +111,8 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()], Author
         "name": name,
         "Author": Author,
         "Editor":Editor,
+        "Prix":Prix,
+        "Owner":Owner,
     }
     try:
         new_book_test = Book.model_validate(new_book_data)

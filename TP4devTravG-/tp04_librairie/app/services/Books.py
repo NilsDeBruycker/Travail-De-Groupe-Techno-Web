@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-from app.schemas import book
+from app.schemas import books
 from app.database import Session
 from app.models.book import Book
 
