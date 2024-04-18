@@ -66,7 +66,7 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
 
 
 @router.post('/new')
-def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[str, Form()]=0,Editor:Annotated[str, Form()]='none'):
+def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[float, Form()]=0,Editor:Annotated[str, Form()]='none'):
     new_book_data = {
         "id": str(uuid4()),
         "name": name,
@@ -74,6 +74,7 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
         "Editor":Editor,
         "Prix":Prix,
         "Owner": Owner,
+        "status":"privé"
         
     }
     try:
@@ -83,7 +84,7 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid name or author or edditor for the book.",
         )
-    service.save_book(new_book_data)
+    service.save_book(new_book_test)
     return RedirectResponse(url="/books/", status_code=302)
 
 @router.get('/modify')
@@ -184,7 +185,7 @@ def sell_book(id: Annotated[str, Form()],user: UserSchema = Depends(login_manage
     else:
         modified_book={
             "Author":book.Author,
-            "Edditor":book.Edditor,
+            "Editor":book.Editor,
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
@@ -214,7 +215,7 @@ def retire_book_from_sale(id: Annotated[str, Form()],user: UserSchema = Depends(
     else:
         modified_book={
             "Author":book.Author,
-            "Edditor":book.Edditor,
+            "Editor":book.Editor,
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
@@ -239,7 +240,7 @@ def buy_book(id:Annotated[str, Form()],user: UserSchema = Depends(login_manager)
     else:
         modified_book={
             "Author":book.Author,
-            "Edditor":book.Edditor,
+            "Editor":book.Editor,
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
@@ -264,7 +265,7 @@ def change_book_price(id:Annotated[str, Form()],price:Annotated[float, Form()],u
     else:
         modified_book={
             "Author":book.Author,
-            "Edditor":book.Edditor,
+            "Editor":book.Editor,
             "id":book.id,
             "name":book.name,
             "Prix":price,

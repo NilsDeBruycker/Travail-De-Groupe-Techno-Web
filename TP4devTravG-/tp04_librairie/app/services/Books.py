@@ -1,21 +1,24 @@
+from uuid import uuid4
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from app.schemas import books
 from app.database import Session
 from app.models.book import Book
+from app.schemas.books import Book as Bookshemat
 
 
-def save_book(new_book: Book) -> Book:
+def save_book(new_book: Bookshemat):
     with Session() as session:
         new_book_entity = Book(
-            id= str,
+            id= new_book.id,
             name= new_book.name,
             Prix=new_book.Prix,
-            owner=new_book.owner,
+            owner_email=new_book.Owner,
             status=new_book.status, 
             Author= new_book.Author ,
-            Editor= new_book.Edditor)
+            Editor= new_book.Editor,
+            )
         session.add(new_book_entity)
         session.commit()
 
@@ -31,7 +34,7 @@ def get_public_book():
             owner=book.owner,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Edditor,
+            Edditor=book.Editor,
         )
         
         for book in books_data
@@ -49,7 +52,7 @@ def get_own_books(user):
             owner=book.owner,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Edditor,
+            Edditor=book.Editor,
         )
         
         for book in books_data
@@ -67,7 +70,7 @@ def get_all_books() -> list[Book]:
             owner=book.owner,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Edditor,
+            Edditor=book.Editor,
         )
         
         for book in books_data
@@ -79,7 +82,7 @@ def delete_book_by_id(book_id:str):
         book=session.scalars(statement).one()
         session.delete(book)
         session.commit()
-        
+
 def is_book_exist(book_id:str):
     with Session() as session:
         statement=select(Book).filter_by(id=book_id)
@@ -100,7 +103,7 @@ def get_book_by_id(book_id):
             owner=book.owner,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Edditor,
+            Edditor=book.Editor,
         )
 
 def modify_book_by_id(book_id: str,modified_book) -> Book | None:
@@ -112,5 +115,5 @@ def modify_book_by_id(book_id: str,modified_book) -> Book | None:
         book.status=modified_book["status"]
         book.Prix=modified_book["prix"]
         book.Author=modified_book["Author"],
-        book.Edditor=modified_book["Edditor"]
+        book.Editor=modified_book["Edditor"]
         session.commit()

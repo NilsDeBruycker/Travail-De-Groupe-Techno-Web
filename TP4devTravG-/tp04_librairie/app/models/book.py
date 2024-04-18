@@ -9,12 +9,12 @@ from app.database import Base
 class User(Base):
     __tablename__ = 'users'
     
-    email          : Mapped[str] = mapped_column(String(72), primary_key=True)
-    username    : Mapped[str] = mapped_column(String(72), unique=True)
+    email       : Mapped[str] = mapped_column(String(72), primary_key=True)
+    username    : Mapped[str] = mapped_column(String(72))
     password    : Mapped[str] = mapped_column(String(72))
     blocked     : Mapped[Boolean]=mapped_column(Boolean)
     role        : Mapped[str] = mapped_column(String(7))
-    books: Mapped[list["Book"]] = relationship()
+    books       : Mapped[list["Book"]] = relationship()
 
 class Book(Base):
     __tablename__ = "books"
@@ -22,9 +22,9 @@ class Book(Base):
     id = mapped_column(String(72), primary_key=True)
     name = mapped_column(String(72))
     Prix = mapped_column(FLOAT(3,3)) # pas sur que bon type
-    status = mapped_column(DateTime)
+    status = mapped_column(String(72))
     Author=mapped_column(String(72))
-    Edditor= mapped_column(String(72)) #metre optionel
+    Editor= mapped_column(String(72)) #metre optionel
     
     owner_email: Mapped[int] = mapped_column(ForeignKey("users.email"))
     owner: Mapped["User"] = relationship()
