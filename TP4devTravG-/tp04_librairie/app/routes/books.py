@@ -153,3 +153,35 @@ def deletebook(id: Annotated[str, Form()], user: UserSchema = Depends(login_mana
         )
     service.delete_book_by_id(id)
     return RedirectResponse(url="/books/", status_code=302)
+
+@router.post('/sell')
+def sell_book(book_id: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    book=service.get_book_by_id(book_id)
+    if book is None:
+        return HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+                detail=" book not found"
+        )
+    if user.email!=book.owner_email and user.role!="admin":
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="that book is not yours."
+        )
+    elif book.status=="en vente":
+        return HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="already selling this book"
+        )
+    else:
+        modified_book={
+            "Author":book.Author,
+            "Edditor":book.Edditor,
+            "id":book.id,
+            "name":book.name,
+            "Prix":book.Prix,
+            "owner":book.owner,
+            "status":"en vente",
+        }
+        service.modify_book_by_id(book.id,modified_book)
+
+

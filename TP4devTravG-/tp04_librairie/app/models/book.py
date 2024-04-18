@@ -23,6 +23,8 @@ class Book(Base):
     name = mapped_column(String(72))
     Prix = mapped_column(FLOAT(3,3)) # pas sur que bon type
     status = mapped_column(DateTime)
+    Author=mapped_column(String(72))
+    Edditor= mapped_column(String(72)) #metre optionel
     
     owner_email: Mapped[int] = mapped_column(ForeignKey("users.email"))
     owner: Mapped["User"] = relationship()

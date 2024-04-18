@@ -49,6 +49,7 @@ def get_all_users() :
         return [
             User(
                 email=user.email,
+                password=user.password,
                 username=user.username,
                 role=user.role,
                 blocked=user.blocked,
