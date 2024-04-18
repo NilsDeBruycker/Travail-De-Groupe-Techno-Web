@@ -68,7 +68,11 @@ def get_book(request: Request, user: UserSchema = Depends(login_manager.optional
 
 
 @router.post('/new')
-def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Owner: Annotated[str, Form()]="none?",Prix: Annotated[float, Form()]=0,Editor:Annotated[str, Form()]='none'):
+def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()],Owner: Annotated[str, Form()]=None,Editor:Annotated[str, Form()]=None,Prix: Annotated[float, Form()]=0):
+    if Owner is not None:
+        status="privé"
+    else :
+        status="en vente"
     new_book_data = {
         "id": str(uuid4()),
         "name": name,
@@ -76,7 +80,7 @@ def create_new_book(name: Annotated[str, Form()], Author: Annotated[str, Form()]
         "Editor":Editor,
         "Prix":Prix,
         "Owner": Owner,
-        "status":"privé"
+        "status": status,
         
     }
     try:

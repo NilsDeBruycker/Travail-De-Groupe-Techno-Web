@@ -1,4 +1,4 @@
-get all débeugé? plus de doné et livre requis pour les get NILS
+get all débeugé? plus de doné et livre requis pour tester les get completement  
 get own
 get public
 
@@ -10,12 +10,12 @@ block
 unblock
 buy
 change price
-login
-signup
+login debugé
+signup débeugé
 logout débeugé
 user me
 user all
-promot 
+promote 
 demote 
-modify user(profile)
+modify user(profile/nom utilisateur) NILS
 new pasword

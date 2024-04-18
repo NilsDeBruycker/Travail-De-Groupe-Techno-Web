@@ -26,16 +26,15 @@
     <a class="btn btn-outline-dark mx-2" href="/users/login">Log In</a>
 </div>
 {% endif %}
-{% if current_user is not none %}
 <div>
     <form action="/users/modify" method="post">
         
     <div class="form-group">
         <label for="name">nouveau nom utilisateur</label>
-        <input type="text" class="form-control" id="name"
-            name="name" placeholder="" />
+        <input type="text" class="form-control" id="new_username"
+            name="new_username" placeholder="" />
             <button type="submit" class="btn btn-success btn-delete"> change username</button>
-            </form>
+        </form>
     </div>
     <form action="/users/new_password" method="post">
         
@@ -83,3 +82,4 @@
         </form>
     </div> 
 </div>
+{% endblock %}

@@ -110,7 +110,7 @@ def delete_user_by_email( email: str):
 
 def modify_user(new_username,curent_user:User):
      with Session() as session:
-        statement = select(User).filter_by(id=curent_user.email)
+        statement = select(User).filter_by(email=curent_user.email)
         user = session.scalars(statement).one()
         user.username=new_username
         session.commit()

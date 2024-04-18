@@ -31,18 +31,18 @@ def get_public_book():
             id=book.id,
             name=book.name,
             Prix=book.Prix,
-            owner=book.owner,
+            owner=book.owner_email,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Editor,
+            Editor=book.Editor,
         )
         
         for book in books_data
     ]
 
-def get_own_books(user):
+def get_own_books(user_email):
     with Session() as session:
-     statement = select(Book).filter(Book.owner_email==user.email)
+     statement = select(Book).filter(Book.owner_email==user_email)
      books_data = session.scalars(statement).unique().all()
     return [
         Book(

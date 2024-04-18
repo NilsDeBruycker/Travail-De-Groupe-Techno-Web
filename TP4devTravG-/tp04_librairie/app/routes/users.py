@@ -135,7 +135,7 @@ def demote_user_route(email:Annotated[str, Form()], current_user: UserSchema = D
 def go_to_profile(request:Request,user: UserSchema = Depends(login_manager)):
     Books=books_service.get_own_books(user.email)
     return templates.TemplateResponse(
-        "seeprofile.html",
+        "see_profile.html",
         context={'request': request,"books":Books,'current_user': user}
         )
 
