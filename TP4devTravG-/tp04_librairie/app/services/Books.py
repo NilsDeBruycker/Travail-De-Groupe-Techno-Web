@@ -49,10 +49,10 @@ def get_own_books(user):
             id=book.id,
             name=book.name,
             Prix=book.Prix,
-            owner=book.owner,
+            owner=book.owner_email,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Editor,
+            Editor=book.Editor,
         )
         
         for book in books_data
@@ -67,10 +67,10 @@ def get_all_books() -> list[Book]:
             id=book.id,
             name=book.name,
             Prix=book.Prix,
-            owner=book.owner,
+            owner=book.owner_email,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Editor,
+            Editor=book.Editor,
         )
         
         for book in books_data
@@ -95,15 +95,15 @@ def is_book_exist(book_id:str):
 def get_book_by_id(book_id):
      with Session() as session:
         statement=select(Book).filter(Book.id==book_id)
-        book=session.scalars(statement).one()
+        book=session.scalars(statement).one_or_none()
         return Book(
             id=book.id,
             name=book.name,
             Prix=book.Prix,
-            owner=book.owner,
+            owner_email=book.owner_email,
             status=book.status,
             Author=book.Author,
-            Edditor=book.Editor,
+            Editor=book.Editor,
         )
 
 def modify_book_by_id(book_id: str,modified_book) -> Book | None:
@@ -113,7 +113,7 @@ def modify_book_by_id(book_id: str,modified_book) -> Book | None:
         book.owner_email=modified_book["Owner"]
         book.name=modified_book["name"]
         book.status=modified_book["status"]
-        book.Prix=modified_book["prix"]
-        book.Author=modified_book["Author"],
-        book.Editor=modified_book["Edditor"]
+        book.Prix=modified_book["Prix"]
+        book.Author=modified_book["Author"]
+        book.Editor=modified_book["Editor"]
         session.commit()

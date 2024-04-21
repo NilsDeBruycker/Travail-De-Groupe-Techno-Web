@@ -146,7 +146,7 @@ def modify_profile(new_username:Annotated[str, Form()], current_user: UserSchema
 
 
 @router.post("/new_password")
-def redo_password(email:Annotated[str, Form()],password: Annotated[str, Form()],password2: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+def redo_password(password: Annotated[str, Form()],password2: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
     if password==password2:
-        user_service.change_password(user.email ,hashlib.sha3_256(password).hexdigest())
+        user_service.change_password(user.email ,hashlib.sha3_256(password.encode()).hexdigest())
     return RedirectResponse(url="/users/profile", status_code=302)

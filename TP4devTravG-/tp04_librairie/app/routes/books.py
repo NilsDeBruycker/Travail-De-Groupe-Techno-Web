@@ -195,10 +195,11 @@ def sell_book(id: Annotated[str, Form()],user: UserSchema = Depends(login_manage
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
-            "owner":book.owner,
+            "Owner":book.owner_email,
             "status":"en vente",
         }
         service.modify_book_by_id(book.id,modified_book)
+        return RedirectResponse(url="/users/profile", status_code=302)
 
 @router.post('/unsell')
 def retire_book_from_sale(id: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
@@ -225,10 +226,11 @@ def retire_book_from_sale(id: Annotated[str, Form()],user: UserSchema = Depends(
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
-            "owner":book.owner,
+            "Owner":book.owner_email,
             "status":"privé",
         }
         service.modify_book_by_id(book.id,modified_book)
+        return RedirectResponse(url="/users/profile", status_code=302)
 
 @router.post('/buy')
 def buy_book(id:Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
@@ -250,10 +252,11 @@ def buy_book(id:Annotated[str, Form()],user: UserSchema = Depends(login_manager)
             "id":book.id,
             "name":book.name,
             "Prix":book.Prix,
-            "owner": user.email,
+            "Owner": user.email,
             "status":"privé",
         }
         service.modify_book_by_id(book.id,modified_book)
+        return RedirectResponse(url="/books/", status_code=302)
 
 @router.post("/change_price")
 def change_book_price(id:Annotated[str, Form()],price:Annotated[float, Form()],user: UserSchema = Depends(login_manager)):
@@ -263,7 +266,7 @@ def change_book_price(id:Annotated[str, Form()],price:Annotated[float, Form()],u
             status_code=status.HTTP_404_NOT_FOUND,
                 detail=" book not found"
         )
-    if book.status!="en vente":
+    if book.Prix==price:
         return HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Price is already that."
@@ -275,7 +278,8 @@ def change_book_price(id:Annotated[str, Form()],price:Annotated[float, Form()],u
             "id":book.id,
             "name":book.name,
             "Prix":price,
-            "owner": book.owner,
+            "Owner": book.owner_email,
             "status":"privé",
         }
         service.modify_book_by_id(book.id,modified_book)
+        return RedirectResponse(url="/users/profile", status_code=302)

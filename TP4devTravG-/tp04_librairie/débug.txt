@@ -1,23 +1,26 @@
 get all débeugé? plus de doné et livre requis pour tester les get completement  
-get own
-get public
+get own débeugé
+get public débeugé
 
 modify
 delete
-sell
-unsell
-block
-unblock
-buy
+sell debugé
+unsell debugé
+block debugé 
+unblock débeugé
+buy débeugé
 change price
 login debugé
 signup débeugé
 logout débeugé
 user me pas beugé
+
+user / check profil debugé
+
 user all
-get user email
+get user email 
 get user by name ? peut etre suprimer car plusieurs utilisateur peuva avoir meme nom
-promote 
-demote 
+promote débeugé
+demote débeugé
 modify user(profile/nom utilisateur) débeugé
-new pasword
+new pasword débeugé
