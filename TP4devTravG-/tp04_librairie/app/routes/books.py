@@ -116,7 +116,7 @@ def go_to_modify(request: Request, user: UserSchema = Depends(login_manager.opti
     )
 
 @router.post('/modify')
-def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],Author: Annotated[str, Form()],Owner: Annotated[str, Form()]=None,Prix: Annotated[str, Form()]=0,Editor: Annotated[str, Form()]="none"):
+def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],status: Annotated[str, Form()],Author: Annotated[str, Form()],Owner: Annotated[str, Form()]=None,Prix: Annotated[str, Form()]=0,Editor: Annotated[str, Form()]="none"):
     if not service.is_book_exist(id):
         return HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -129,6 +129,7 @@ def modify_book(id : Annotated[str, Form()],name: Annotated[str, Form()],Author:
         "Editor":Editor,
         "Prix":Prix,
         "Owner":Owner,
+        "Status":status
     }
     try:
         new_book_test = Book.model_validate(new_book_data)

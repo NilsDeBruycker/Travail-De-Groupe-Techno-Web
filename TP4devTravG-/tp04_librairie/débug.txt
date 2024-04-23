@@ -17,8 +17,8 @@ user me pas beugé
 
 user / check profil debugé
 
-user all
-get user email 
+user all débeugé
+get user email débeugé
 get user by name ? peut etre suprimer car plusieurs utilisateur peuva avoir meme nom
 promote débeugé
 demote débeugé
