@@ -2,8 +2,8 @@ get all débeugé? plus de doné et livre requis pour tester les get completemen
 get own débeugé
 get public débeugé
 
-modify
-delete
+modify débugé
+delete débugé
 sell debugé
 unsell debugé
 block debugé 
