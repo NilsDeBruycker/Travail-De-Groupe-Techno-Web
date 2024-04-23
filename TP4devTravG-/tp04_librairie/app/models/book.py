@@ -30,7 +30,7 @@ class Book(Base):
     owner: Mapped["User"] = relationship()
 
     __table_args__ = (
-            CheckConstraint('Prix > 0', name='check_positive_price'),
+            CheckConstraint('Prix >= 0', name='check_positive_price'),
         )
 
 

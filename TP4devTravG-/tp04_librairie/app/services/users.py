@@ -7,7 +7,7 @@ from sqlalchemy import select
 def get_user_by_username(username: str):
     with Session() as session:
         statement = select(User).filter(User.username==username)
-        user = session.scalar(statement) 
+        user = session.scalars(statement).one()
         if user is not None:
             return UserSchema(
                 username=user.username,

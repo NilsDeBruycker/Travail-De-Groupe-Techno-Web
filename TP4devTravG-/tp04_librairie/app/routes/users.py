@@ -29,6 +29,11 @@ def login_route(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Bad credentials."
         )
+    if user.blocked==True:
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="blocked."
+            )
     access_token = login_manager.create_access_token(
         data={'sub': user.email}
     )
@@ -91,10 +96,21 @@ def logout_route():
 
 @router.post("/block")
 def go_to_block_page(email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    if user_service.get_user_by_email(email) is None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="user doesn't exist")
+    
     user_service.block_user(email)
     return RedirectResponse(url="/users/", status_code=302)
+
 @router.post("/unblock")
 def go_to_block_page(email:Annotated[str, Form()],user: UserSchema = Depends(login_manager),):
+    if user_service.get_user_by_email(email) is None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="user doesn't exist")
+    
     user_service.unblock_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 
@@ -121,6 +137,12 @@ def show_all_users(request:Request,user: UserSchema = Depends(login_manager)):
 def promote_user_route(email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can promote users.")
+    
+    if user_service.get_user_by_email(email) is None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="user doesn't exist")
+    
     promote_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 
@@ -128,6 +150,12 @@ def promote_user_route(email:Annotated[str, Form()], current_user: UserSchema = 
 def demote_user_route(email:Annotated[str, Form()], current_user: UserSchema = Depends(login_manager)):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Only admins can demote users.")
+    
+    if user_service.get_user_by_email(email) is None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="user doesn't exist")
+    
     demote_user(email)
     return RedirectResponse(url="/users/", status_code=302)
 
@@ -150,3 +178,12 @@ def redo_password(password: Annotated[str, Form()],password2: Annotated[str, For
     if password==password2:
         user_service.change_password(user.email ,hashlib.sha3_256(password.encode()).hexdigest())
     return RedirectResponse(url="/users/profile", status_code=302)
+
+@router.post("/delete")
+def delete_user(email: Annotated[str, Form()],user: UserSchema = Depends(login_manager)):
+    if user_service.get_user_by_email(email) is None:
+        return HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="user doesn't exist")
+    user_service.delete_user_by_email(email)
+    return RedirectResponse(url="/users/", status_code=302)
