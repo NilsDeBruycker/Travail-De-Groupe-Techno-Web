@@ -1,0 +1,75 @@
+{% extends "empty_page.html" %}
+{% from "my_macro.html" import show_books %}
+{% block content %}
+{% if current_user is not none %}
+    <h2>Utilisateur connecté : {{ current_user.username }}</h2>
+{% endif %}
+<h1>My Books</h1>
+<div class="container">
+    <table class="table">
+        <tr class="position-sticky">
+            <th>id</th>
+            <th>nom</th>
+            <th>Auteur</th>
+            <th>Editeur</th>
+            <th>owner</th>
+            <th>price</th>
+            <th>status</th>
+        </tr>
+        {% set ns = namespace(i = 0) %}
+        {% for book in books %}
+            {{ show_books(book.id, book.name, book.Author, book.Editor,book.owner,book.Prix,book.status) }}
+            {% set ns.i = ns.i + 1 %}
+        {% endfor %}
+        number of books {{ns.i}}
+    </table> 
+</div>
+{%if current_user is none%}
+<div>
+    <a class="btn btn-outline-dark mx-2" href="/users/login">Log In</a>
+</div>
+{% endif %}
+{% if current_user is not none %}
+<div>
+    <form action="/users/logout" method="post">
+        <button type="submit" class="btn btn-success btn-delete"> log_out</button>
+    </form>
+</div>
+<div>
+    <form action="/users/profile" method="get">
+        <button type="submit" class="btn btn-success btn-delete"> mon profil</button>
+    </form>
+</div>
+<form action="/books/buy" method="post">
+    <div class="form-group">
+        <input type="text" class="form-control" id="id_book_to_buy" name="id" placeholder="Entrez l'id du livre à acheter" />
+    </div>
+    <button type="submit" class="btn btn-success btn-delete">acheter un livre</button>
+</form>
+    {%if current_user.role == "admin"%}
+        <div class="container mt-3">
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-outline-success btn-create" href="/books/new">Créer un nouveau livre</a>
+            </div>
+            <div class="col">
+                <a class="btn btn-outline-success btn-modify" href="/books/modify">Modifier un livre</a>
+            </div>
+            <div class="col">
+                <a class="btn btn-success btn-delete" href="/users/">gérer les Utilisateur</a>
+            </div>
+            <div class="col">
+                <form action="/books/delete" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="id_book_to_delete" name="id" placeholder="Entrez l'id du livre à suppr" />
+                    </div>
+                    <button type="submit" class="btn btn-success btn-delete">Supprimer un livre</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    {% endif %}
+
+{% endif %}
+{% endblock %}
