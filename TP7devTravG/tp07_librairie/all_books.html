@@ -10,23 +10,9 @@
         <div class="row">
             <div class="col bg-light border rounded m-4 p-4" id="livres_a_vendre">
                 <h2>a vendre</h2>
-                <body>   
-                    <div class="book",id="firts_book",price="5.55">
-                        <div class="book-body">
-                            <h5 class ="title">"tintin au tibet"</h5>
-                            <h5 class ="title">"12.59"</h5>                
-                        </div>
-                    </div> 
-                </body>
             </div>
             <div class="col bg-light border rounded m-4 p-4" id="livres_vendu">
                 <h5>vendu</h5>
-                <div class="book">
-                    <div class="book-body">
-                        <h5 class ="book title">lucky luke</h5>
-                        <p class="prix">5.55</p>
-                    </div>
-                </div> 
             </div>
         </div>
     </div>
@@ -44,16 +30,17 @@
     <form id="new_book_form" class="form">
       <div class="form-group">
         <label for="name">Nom du livre</label>
-        <input class="form-control" type="text" name="name" id="name">
+        <input class="form-control" type="text" name="name" id="name" required>
         <small class="form-text- text-muted">Veuillez choisir un nom concis.</small>
       </div>
       <div class="form-group">
-        <label for="edditor">edditor du livre</label>
-        <textarea class="form-control" name="edditor" id="edditor" cols="15" rows="4"></textarea>
+        <label for="edditor">edditeur du livre</label>
+        <textarea class="form-control" name="edditor" id="edditor" cols="15" rows="4" required></textarea>
       </div>
       <div class="form-group">
         <label for="price">prix du livre</label>
-        <textarea class="form-control" name="price" id="price" cols="8" rows="1"></textarea>
+        <input type="text" name="price" id="price" required/>
+        <!-- <textarea class="form-control" name="price" id="price" cols="8" rows="1"></textarea> -->
       </div>
       <div class="form-check">
         <input type="checkbox" class="form-check-input" name="vendu" id="vendu">

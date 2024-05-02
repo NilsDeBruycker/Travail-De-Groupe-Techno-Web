@@ -27,7 +27,7 @@ const books =[
         prix: 12.57,
         nom: "tintin2",
         Editeur:"dupuis",
-        status_de_vente: true
+        status_de_vente: false
     },
 
 
@@ -39,7 +39,10 @@ const books =[
         status_de_vente: true
     }
 ]
-
+/**
+ * 
+ * @param {livre} book 
+ */
 const addBehaviorToBook = (book) => {
     // Ensure each book has a unique ID
     const bookId = book.id || window.crypto.randomUUID()
@@ -98,6 +101,10 @@ function removebook(id){
     book.remove();}
 
 function addbook(name, edditor, price,status_vente="en vente") {
+    if (isNaN(price)){
+        alert("please input a number")
+        return
+    }
     let book_column;
     if (status_vente){ book_column = document.querySelector("#livres_a_vendre")}
     else{ book_column = document.querySelector("#livres_vendu")}
@@ -136,7 +143,6 @@ function addbook(name, edditor, price,status_vente="en vente") {
 }
 
 const main = () => {
-    
     books.forEach((book) => {
         addbook(book.nom,book.Editeur,book.prix,book.status_de_vente)
     });
