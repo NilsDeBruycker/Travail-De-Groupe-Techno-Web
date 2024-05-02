@@ -101,12 +101,15 @@ function addbook(name, edditor, price,status_vente="en vente") {
     let book_column;
     if (status_vente){ book_column = document.querySelector("#livres_a_vendre")}
     else{ book_column = document.querySelector("#livres_vendu")}
+
     const id =String(window.crypto.randomUUID());
+    
     const new_book = document.createElement('div')
     new_book.setAttribute("class","book")
     new_book.setAttribute('id',String(id))
     new_book.setAttribute('draggable', true)
     new_book.innerHTML += `<h6>${name}</h6>`
+    
     const content =document.createElement("div")
     content.setAttribute("class","book-body")
     content.innerHTML += `<h6>${"editeur"}</h6>`
@@ -117,6 +120,7 @@ function addbook(name, edditor, price,status_vente="en vente") {
     new_book.append(content)
 
     const completion_button = document.createElement('button')
+    completion_button.setAttribute("class","btn-delete")
     completion_button.onclick=function(){
         removebook(id)
     }
