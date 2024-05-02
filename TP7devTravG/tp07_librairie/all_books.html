@@ -1,75 +1,70 @@
-{% extends "empty_page.html" %}
-{% from "my_macro.html" import show_books %}
-{% block content %}
-{% if current_user is not none %}
-    <h2>Utilisateur connecté : {{ current_user.username }}</h2>
-{% endif %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="./style.css">
+
+
+
+
 <h1>My Books</h1>
-<div class="container">
-    <table class="table">
-        <tr class="position-sticky">
-            <th>id</th>
-            <th>nom</th>
-            <th>Auteur</th>
-            <th>Editeur</th>
-            <th>owner</th>
-            <th>price</th>
-            <th>status</th>
-        </tr>
-        {% set ns = namespace(i = 0) %}
-        {% for book in books %}
-            {{ show_books(book.id, book.name, book.Author, book.Editor,book.owner,book.Prix,book.status) }}
-            {% set ns.i = ns.i + 1 %}
-        {% endfor %}
-        number of books {{ns.i}}
-    </table> 
-</div>
-{%if current_user is none%}
-<div>
-    <a class="btn btn-outline-dark mx-2" href="/users/login">Log In</a>
-</div>
-{% endif %}
-{% if current_user is not none %}
-<div>
-    <form action="/users/logout" method="post">
-        <button type="submit" class="btn btn-success btn-delete"> log_out</button>
-    </form>
-</div>
-<div>
-    <form action="/users/profile" method="get">
-        <button type="submit" class="btn btn-success btn-delete"> mon profil</button>
-    </form>
-</div>
-<form action="/books/buy" method="post">
-    <div class="form-group">
-        <input type="text" class="form-control" id="id_book_to_buy" name="id" placeholder="Entrez l'id du livre à acheter" />
-    </div>
-    <button type="submit" class="btn btn-success btn-delete">acheter un livre</button>
-</form>
-    {%if current_user.role == "admin"%}
-        <div class="container mt-3">
+<body>
+    <div class="container p-4">        
         <div class="row">
-            <div class="col">
-                <a class="btn btn-outline-success btn-create" href="/books/new">Créer un nouveau livre</a>
+            <div class="col bg-light border rounded m-4 p-4" id="livres_a_vendre">
+                <h2>a vendre</h2>
+                <body>   
+                    <div class="book",id="firts_book",price="5.55">
+                        <div class="book-body">
+                            <h5 class ="title">"tintin au tibet"</h5>
+                            <h5 class ="title">"12.59"</h5>                
+                        </div>
+                    </div> 
+                </body>
             </div>
-            <div class="col">
-                <a class="btn btn-outline-success btn-modify" href="/books/modify">Modifier un livre</a>
-            </div>
-            <div class="col">
-                <a class="btn btn-success btn-delete" href="/users/">gérer les Utilisateur</a>
-            </div>
-            <div class="col">
-                <form action="/books/delete" method="post">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="id_book_to_delete" name="id" placeholder="Entrez l'id du livre à suppr" />
+            <div class="col bg-light border rounded m-4 p-4" id="livres_vendu">
+                <h5>vendu</h5>
+                <div class="book">
+                    <div class="book-body">
+                        <h5 class ="book title">lucky luke</h5>
+                        <p class="prix">5.55</p>
                     </div>
-                    <button type="submit" class="btn btn-success btn-delete">Supprimer un livre</button>
-                </form>
+                </div> 
             </div>
         </div>
     </div>
-    
-    {% endif %}
 
-{% endif %}
-{% endblock %}
+
+
+
+
+    
+    <hr class="my-4">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <h2>Ajouter un livre</h2>
+
+    <form id="new_book_form" class="form">
+      <div class="form-group">
+        <label for="name">Nom du livre</label>
+        <input class="form-control" type="text" name="name" id="name">
+        <small class="form-text- text-muted">Veuillez choisir un nom concis.</small>
+      </div>
+      <div class="form-group">
+        <label for="edditor">edditor du livre</label>
+        <textarea class="form-control" name="edditor" id="edditor" cols="15" rows="4"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="price">prix du livre</label>
+        <textarea class="form-control" name="price" id="price" cols="8" rows="1"></textarea>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="vendu" id="vendu">
+        <label class="form-check-label" for="vendu">livre en vente</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+
+

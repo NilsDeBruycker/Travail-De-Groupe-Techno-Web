@@ -4,18 +4,29 @@ body {
     padding: 6rem;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.book {
+  width: 18rem;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-left: 1rem;
+  user-select: none;
+}
+
+.book:hover {
+  background-color: lightblue;
+}
+.book-body{
+
+  width:17rem;
+  margin-left:1rem;
+}
+
 /* Styles pour le bouton "Créer un nouveau livre" */
 .btn-create {
     border: 1px solid #000000; /* Bleu pastel */
     background-color: #000000; /* Bleu clair */
-    color:white;
-}
-
-/* Styles pour le bouton "Modifier un livre" */
-.btn-modify {
-    border: 2px solid #d7c820; /* Rose pastel clair */
-    background-color: #d7c820; /* Rose clair */
-    color:rgb(249, 249, 252);
+    color:rgb(106, 241, 15);
 }
 
 /* Styles pour le bouton "Supprimer" */
